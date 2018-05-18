@@ -55,6 +55,9 @@ void main(){
 	
 	//Configura o relogio
 	configura_relogio();
+	
+	//Inicializa o visor LCD
+	LCD_init();
 
 	while(1){
 		c = le_teclado();
