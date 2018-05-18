@@ -14,5 +14,8 @@ void configura_relogio(){
 	RCAP2L = 0;
 	RCAP2H = 0x4C;
 	TR2 = 1;
+	
+	EA = 1; //habilita as interrrupcoes do chip
+	ET2 = 1;	//habilita interrupcao da serial
 }
 
