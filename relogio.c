@@ -19,3 +19,15 @@ void configura_relogio(){
 	ET2 = 1;	//habilita interrupcao da serial
 }
 
+void atualiza_relogio() interrupt 5 {
+	
+	static char count = 0;
+	
+	count ++;
+	
+	if (count >= 40){
+		count = 0;
+		
+	
+	
+}
