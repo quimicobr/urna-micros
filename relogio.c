@@ -27,7 +27,18 @@ void atualiza_relogio() interrupt 5 {
 	
 	if (count >= 40){
 		count = 0;
-		
+		segundos ++;
+		if (segundos >= 60){
+			segundos = 0;
+			minutos ++;
+			if (minutos >= 60){
+				minutos = 0;
+				if (horas >= 24){
+					horas = 0;
+				}
+			}
+		}
+	}
 	
 	
 }
