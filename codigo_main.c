@@ -17,6 +17,7 @@ char estado;
 #define BLOQUEADA 1
 #define AUTONOMA 2 
 
+//Variaveis onde estará registrada a hora
 char hora;
 char minuto;
 char segundo;
@@ -46,6 +47,12 @@ void configura_serial();
 	}presidente[10], governador[10], senador[10];
 
 
+//Como vai funcionar: a urna tem que estar em modo standby para receber algo do teclado ou da serial.
+//Se ela está em modo bloqueada, ela não pode estar disponível para receber nada do teclado.
+//Se ela está em modo
+
+
+//Inicialização: configurar serial, relógio, LCD e pedir os dados de todos os candidatos possíveis 
 
 void main(){
 	char c;
