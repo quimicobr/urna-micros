@@ -8,7 +8,7 @@
 
 //TIMER0: uso geral (atraso,...)
 //TIMER1: exclusivo da serial
-//TIMER2: exclusivo do relÛgio
+//TIMER2: exclusivo do rel√≥gio
 
 
 
@@ -19,11 +19,12 @@ char estado;
 
 char hora;
 char minuto;
+char segundo;
 
-// -- Flag que indica se o microcontrolador est· esperando uma resposta do PC
+// -- Flag que indica se o microcontrolador est√° esperando uma resposta do PC
 //No  momento que o microcontrolador envia um comando que precisa de resposta
-//essa flag È setada para 0. No momento que o computador responde, a flag
-//È setada para 1.
+//essa flag √© setada para 0. No momento que o computador responde, a flag
+//√© setada para 1.
 char respostaPC;
 #define OK 0
 #define PE 1
