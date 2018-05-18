@@ -26,12 +26,12 @@ data char fifo_recepcao[30];
 void configura_serial(){
 	//configura o timer 1
 	TMOD &= 0x0F;
-	TMOD |= 0x20; //timer de 8 bits com recarga autom·tica
+	TMOD |= 0x20; //timer de 8 bits com recarga autom√°tica
 	TL1 = 0xFD; //19200 bps
 	TH1 = 0xFD; //recarga
 	TR1 = 1; //liga o timer
 	//configura a serial
-	SCON = 0x40; //serial com freq vari·vel
+	SCON = 0x40; //serial com freq vari√°vel
 	EA = 1; //habilita as interrrupcoes do chip
 	ES = 1;	//habilita interrupcao da serial
 }
@@ -43,6 +43,43 @@ char i;
 		while(!TI);
 		TI=0;
 	}
+}
+
+void solicita_senador(char* codigo){
+	
+	char[6] mensagem;
+	mensagem[0] = 'M';
+	mensagem[1] = 'S';
+	mensagem[2] = 2;
+	mensagem[3] = codigo[0];
+	mensagem[4] = codigo[1];
+	respostaPC = PS;
+	escreve_serial(mensagem);
+	
+}
+
+void solicita_governador(char* codigo){
+	
+	char[6] mensagem;
+	mensagem[0] = 'M';
+	mensagem[1] = 'G';
+	mensagem[2] = 2;
+	mensagem[3] = codigo[0];
+	mensagem[4] = codigo[1];
+	respostaPC = PG;
+	escreve_serial(mensagem);
+}
+
+void solicita_presidente(char* codigo){
+	
+	char[6] mensagem;
+	mensagem[0] = 'M';
+	mensagem[1] = 'P';
+	mensagem[2] = 2;
+	mensagem[3] = codigo[0];
+	mensagem[4] = codigo[1];
+	respostaPC = PP;
+	escreve_serial(mensagem);
 }
 
 void trata_interrupcao_serial() interrupt 4 {	
@@ -65,7 +102,7 @@ void trata_interrupcao_serial() interrupt 4 {
 	}	
 }
 
-//No momento, a confirmaÁ„o È enviada assim que o computador envia o comando
+//No momento, a confirma√ß√£o √© enviada assim que o computador envia o comando
 //O 
 void trata_dados(){
 	
@@ -104,7 +141,7 @@ void trata_dados(){
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'C'){	
-		//Confirma conclus„o do voto
+		//Confirma conclus√£o do voto
 		if (respostaPC == PC){
 			respostaPC = OK;
 		}
