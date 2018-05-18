@@ -22,6 +22,8 @@ void configura_relogio(){
 void atualiza_relogio() interrupt 5 {
 	
 	static char count = 0;
+	TF2 = 0;
+	
 	
 	count ++;
 	
