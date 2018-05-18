@@ -48,15 +48,13 @@ void configura_serial();
 
 
 void main(){
-
 	char c;
-
-	
 	
 	//Configura a porta serial
 	configura_serial();
 	
-	
+	//Configura o relogio
+	configura_relogio();
 
 	while(1){
 		c = le_teclado();
