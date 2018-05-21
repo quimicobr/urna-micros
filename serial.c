@@ -1,4 +1,5 @@
 #include<serial.h>
+#include<lcd.h>
 #include<reg52.h>
 
 //0 	EXTERNAL INT 0 	0003h
@@ -31,7 +32,7 @@ void configura_serial(){
 	TH1 = 0xFD; //recarga
 	TR1 = 1; //liga o timer
 	//configura a serial
-	SCON = 0x40; //serial com freq variável
+	SCON = 0x50; //serial com freq variável + habilita recepcao
 	EA = 1; //habilita as interrrupcoes do chip
 	ES = 1;	//habilita interrupcao da serial
 }
@@ -45,60 +46,23 @@ char i;
 	}
 }
 
-void solicita_senador(char* codigo){
-	
-	char[6] mensagem;
-	mensagem[0] = 'M';
-	mensagem[1] = 'S';
-	mensagem[2] = 2;
-	mensagem[3] = codigo[0];
-	mensagem[4] = codigo[1];
-	respostaPC = PS;
-	escreve_serial(mensagem);
-	
-}
 
-void solicita_governador(char* codigo){
-	
-	char[6] mensagem;
-	mensagem[0] = 'M';
-	mensagem[1] = 'G';
-	mensagem[2] = 2;
-	mensagem[3] = codigo[0];
-	mensagem[4] = codigo[1];
-	respostaPC = PG;
-	escreve_serial(mensagem);
-}
 
-void solicita_presidente(char* codigo){
-	
-	char[6] mensagem;
-	mensagem[0] = 'M';
-	mensagem[1] = 'P';
-	mensagem[2] = 2;
-	mensagem[3] = codigo[0];
-	mensagem[4] = codigo[1];
-	respostaPC = PP;
-	escreve_serial(mensagem);
-}
+
 
 void trata_interrupcao_serial() interrupt 4 {	
-	static char i = 0;
+	static char is = 0;
 	if(RI == 1){
 		RI = 0;
-		fifo_recepcao[i] = SBUF;
-		i++;
-		if (fifo_recepcao[i] == 0){
-			i = 0;
-			
+		fifo_recepcao[is] = SBUF;
+		if (fifo_recepcao[is+1] == '\0'){
+			is = 0;
 			trata_dados();
 		}
-		
+		is = is + 1;
 	}
-	
-	
 	if(TI == 1){
-		
+	TI = 0;
 	}	
 }
 
@@ -108,21 +72,23 @@ void trata_dados(){
 	
 	//Libera urna
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'L'){
-		estado = NORMAL;
+		OLU = 1; //Ordem de Liberar Urna 
 		escreve_serial("ML");
 	}
 	
 	//Bloqueia urna
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'B'){
-		estado = BLOQUEADA;
+		OLU = 0; //Ordem de Liberar Urna
 		escreve_serial("MB");
 	}
 	
 	//Atualiza o horario
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'H'){
 		
-		hora = fifo_recepcao[2];
 		minuto = fifo_recepcao[3];
+		escreve_LCD(minuto);
+		hora = fifo_recepcao[2];
+		escreve_LCD(hora);
 		escreve_serial("MH");
 		
 	}
@@ -175,6 +141,43 @@ void trata_dados(){
 		}
 	}
 
+}
+
+void solicita_senador(char* codigo){
+	
+	char mensagem[6];
+	mensagem[0] = 'M';
+	mensagem[1] = 'S';
+	mensagem[2] = 2;
+	mensagem[3] = codigo[0];
+	mensagem[4] = codigo[1];
+	respostaPC = PS;
+	escreve_serial(mensagem);
+	
+}
+
+void solicita_governador(char* codigo){
+	
+	char mensagem[6];
+	mensagem[0] = 'M';
+	mensagem[1] = 'G';
+	mensagem[2] = 2;
+	mensagem[3] = codigo[0];
+	mensagem[4] = codigo[1];
+	respostaPC = PG;
+	escreve_serial(mensagem);
+}
+
+void solicita_presidente(char* codigo){
+	
+	char mensagem[6];
+	mensagem[0] = 'M';
+	mensagem[1] = 'P';
+	mensagem[2] = 2;
+	mensagem[3] = codigo[0];
+	mensagem[4] = codigo[1];
+	respostaPC = PP;
+	escreve_serial(mensagem);
 }
 
 
