@@ -1,0 +1,215 @@
+C51 COMPILER V9.56.0.0   SERIAL                                                            05/18/2018 19:59:39 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE SERIAL
+OBJECT MODULE PLACED IN .\Objects\serial.obj
+COMPILER INVOKED BY: C:\Keil_v5_C51\C51\BIN\C51.EXE serial.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
+                    -s\serial.lst) TABS(2) OBJECT(.\Objects\serial.obj)
+
+line level    source
+
+   1          #include<serial.h>
+   2          #include<lcd.h>
+   3          #include<reg52.h>
+   4          
+   5          //0   EXTERNAL INT 0  0003h
+   6          //1   TIMER/COUNTER 0   000Bh
+   7          //2   EXTERNAL INT 1  0013h
+   8          //3   TIMER/COUNTER 1   001Bh
+   9          //4   SERIAL PORT   0023h
+  10          //5   TIMER/COUNTER 2 (8052)  002Bh
+  11          
+  12          #define NORMAL 0
+  13          #define BLOQUEADA 1
+  14          #define AUTONOMA 2 
+  15          
+  16          #define OK 0
+  17          #define PE 1
+  18          #define PC 2 
+  19          #define PT 3
+  20          #define PS 4
+  21          #define PG 5 
+  22          #define PP 6 
+  23          
+  24          data char fifo_recepcao[30];
+  25          
+  26          
+  27          void configura_serial(){
+  28   1        //configura o timer 1
+  29   1        TMOD &= 0x0F;
+  30   1        TMOD |= 0x20; //timer de 8 bits com recarga automática
+  31   1        TL1 = 0xFD; //19200 bps
+  32   1        TH1 = 0xFD; //recarga
+  33   1        TR1 = 1; //liga o timer
+  34   1        //configura a serial
+  35   1        SCON = 0x50; //serial com freq variável + habilita recepcao
+  36   1        EA = 1; //habilita as interrrupcoes do chip
+  37   1        ES = 1; //habilita interrupcao da serial
+  38   1      }
+  39          
+  40          void escreve_serial(char* mensagem){
+  41   1      char i;
+  42   1        for(i = 0; mensagem[i] != 0 ; i++){
+  43   2          SBUF = mensagem[i];
+  44   2          while(!TI);
+  45   2          TI=0;
+  46   2        }
+  47   1      }
+  48          
+  49          
+  50          
+  51          
+  52          
+  53          void trata_interrupcao_serial() interrupt 4 { 
+  54   1        static char is = 0;
+C51 COMPILER V9.56.0.0   SERIAL                                                            05/18/2018 19:59:39 PAGE 2   
+
+  55   1        if(RI == 1){
+  56   2          RI = 0;
+  57   2          fifo_recepcao[is] = SBUF;
+  58   2          if (fifo_recepcao[is+1] == '\0'){
+  59   3            is = 0;
+  60   3            trata_dados();
+  61   3          }
+  62   2          is = is + 1;
+  63   2        }
+  64   1        if(TI == 1){
+  65   2        TI = 0;
+  66   2        } 
+  67   1      }
+  68          
+  69          //No momento, a confirmação é enviada assim que o computador envia o comando
+  70          //O 
+  71          void trata_dados(){
+  72   1        
+  73   1        //Libera urna
+  74   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'L'){
+  75   2          OLU = 1; //Ordem de Liberar Urna 
+  76   2          escreve_serial("ML");
+  77   2        }
+  78   1        
+  79   1        //Bloqueia urna
+  80   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'B'){
+  81   2          OLU = 0; //Ordem de Liberar Urna
+  82   2          escreve_serial("MB");
+  83   2        }
+  84   1        
+  85   1        //Atualiza o horario
+  86   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'H'){
+  87   2          
+  88   2          minuto = fifo_recepcao[3];
+  89   2          escreve_LCD(minuto);
+  90   2          hora = fifo_recepcao[2];
+  91   2          escreve_LCD(hora);
+  92   2          escreve_serial("MH");
+  93   2          
+  94   2        }
+  95   1        
+  96   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'U'){
+  97   2          
+  98   2          //Envia boletim de urna
+  99   2          
+ 100   2        }
+ 101   1        
+ 102   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'E'){
+ 103   2          //Confirma entrada do eleitor
+ 104   2          if (respostaPC == PE){
+ 105   3            respostaPC = OK;
+ 106   3          }
+ 107   2        }
+ 108   1        
+ 109   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'C'){  
+ 110   2          //Confirma conclusão do voto
+ 111   2          if (respostaPC == PC){
+ 112   3            respostaPC = OK;
+ 113   3          }
+ 114   2        }
+ 115   1        
+ 116   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'T'){
+C51 COMPILER V9.56.0.0   SERIAL                                                            05/18/2018 19:59:39 PAGE 3   
+
+ 117   2          //Confirma timeout do eleitor
+ 118   2          if (respostaPC == PT){
+ 119   3            respostaPC = OK;
+ 120   3          }
+ 121   2        }
+ 122   1        
+ 123   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'S'){
+ 124   2          //Confirma envio do nome de senador
+ 125   2          if (respostaPC == PS){
+ 126   3            respostaPC = OK;
+ 127   3          }
+ 128   2        }
+ 129   1        
+ 130   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'G'){
+ 131   2          //Confirma envio do nome de governador
+ 132   2          if (respostaPC == PG){
+ 133   3            respostaPC = OK;
+ 134   3          }
+ 135   2        }
+ 136   1        
+ 137   1        if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'P'){
+ 138   2          //Confirma envio do nome de presidente
+ 139   2          if (respostaPC == PP){
+ 140   3            respostaPC = OK;
+ 141   3          }
+ 142   2        }
+ 143   1      
+ 144   1      }
+ 145          
+ 146          void solicita_senador(char* codigo){
+ 147   1        
+ 148   1        char mensagem[6];
+ 149   1        mensagem[0] = 'M';
+ 150   1        mensagem[1] = 'S';
+ 151   1        mensagem[2] = 2;
+ 152   1        mensagem[3] = codigo[0];
+ 153   1        mensagem[4] = codigo[1];
+ 154   1        respostaPC = PS;
+ 155   1        escreve_serial(mensagem);
+ 156   1        
+ 157   1      }
+ 158          
+ 159          void solicita_governador(char* codigo){
+ 160   1        
+ 161   1        char mensagem[6];
+ 162   1        mensagem[0] = 'M';
+ 163   1        mensagem[1] = 'G';
+ 164   1        mensagem[2] = 2;
+ 165   1        mensagem[3] = codigo[0];
+ 166   1        mensagem[4] = codigo[1];
+ 167   1        respostaPC = PG;
+ 168   1        escreve_serial(mensagem);
+ 169   1      }
+ 170          
+ 171          void solicita_presidente(char* codigo){
+ 172   1        
+ 173   1        char mensagem[6];
+ 174   1        mensagem[0] = 'M';
+ 175   1        mensagem[1] = 'P';
+ 176   1        mensagem[2] = 2;
+ 177   1        mensagem[3] = codigo[0];
+ 178   1        mensagem[4] = codigo[1];
+C51 COMPILER V9.56.0.0   SERIAL                                                            05/18/2018 19:59:39 PAGE 4   
+
+ 179   1        respostaPC = PP;
+ 180   1        escreve_serial(mensagem);
+ 181   1      }
+ 182          
+ 183          
+ 184          
+ 185          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    439    ----
+   CONSTANT SIZE    =      9    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     31      21
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

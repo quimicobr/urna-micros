@@ -388,6 +388,11 @@
               <FileType>1</FileType>
               <FilePath>.\serial.c</FilePath>
             </File>
+            <File>
+              <FileName>relogio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\relogio.c</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>
