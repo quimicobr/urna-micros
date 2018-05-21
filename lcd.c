@@ -1,7 +1,6 @@
 // Nomes:	Davi Nachtigall Lazzarotto   216628
 //				Gustavo Fernandes (230357)			
 
-
 #include<reg52.h>
 #include<lcd.h>
 

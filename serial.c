@@ -21,7 +21,7 @@
 #define PG 5 
 #define PP 6 
 
-data char fifo_recepcao[30];
+
 
 
 void configura_serial(){
