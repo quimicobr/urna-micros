@@ -2,6 +2,7 @@ extern char estado;
 extern char hora;
 extern char minuto;
 extern char respostaPC;
+extern char OLU;
 
 void configura_serial();
 void escreve_serial(char* mensagem);

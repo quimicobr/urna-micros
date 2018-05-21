@@ -2,7 +2,7 @@
 #include<relogio.h>
 
 // O tempo de estouro do timer 2 com 16 bits é de 35.5555555 ms
-// Pra chegar a 18432 ciclos, ele demora 10 ms
+// Pra chegar a 18452 ciclos, ele demora 10 ms
 // Pra chegar a 46080 ciclos, ele demora 25 ms (1s/40)
 
 //65536 - 46080 = 19456 = 0x4C00
@@ -29,14 +29,14 @@ void atualiza_relogio() interrupt 5 {
 	
 	if (count >= 40){
 		count = 0;
-		segundos ++;
-		if (segundos >= 60){
-			segundos = 0;
-			minutos ++;
-			if (minutos >= 60){
-				minutos = 0;
-				if (horas >= 24){
-					horas = 0;
+		segundo ++;
+		if (segundo >= 60){
+			segundo = 0;
+			minuto ++;
+			if (minuto >= 60){
+				minuto = 0;
+				if (hora >= 24){
+					hora = 0;
 				}
 			}
 		}

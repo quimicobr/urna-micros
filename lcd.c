@@ -16,45 +16,47 @@ void LCD_init(){
  escreve_comando(0x06);
  escreve_comando(0x01);
  atraso_clear();
+
 }
 
 void atraso(){	
 	
-		TR1 = 0;
-		TF1 = 0; //limpa a flag de estouro
-		TMOD = 0x20;	
+		TR0 = 0;
+		TF0 = 0; //limpa a flag de estouro
+		TMOD &= 0xF0;
+		TMOD |= 0x02; //timer de 8 bits com recarga automática	
 	//22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
 	// 40 us -> 74 ciclos - 256 - 74 ciclos = 182 -> valor a ser colocado no registrador
-		TL1 = 182;
-		TR1 = 1; //liga o timer
-		while(TF1 == 0);
+		TL0 = 182;
+		TR0 = 1; //liga o timer
+		while(TF0 == 0);
+		TR0 = 0;
 	}
 	
 void atraso_clear(){	
 	
 		TR0 = 0;
 		TF0 = 0; //limpa a flag de estouro
-		TMOD = 0x01;	
+		TMOD &= 0xF0;
+		TMOD |= 0x01;
 	 //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
 	 // 1650 us -> 3051 ciclos = 62485 (F415) -> valor a ser colocado no registrador
 		TH0 = 0xF4;
 		TL0 = 0x15;
 		TR0 = 1; //liga o timer
 		while(TF0 == 0);
+		TR0 = 0;
 	  }
 		
 void escreve_LCD(char X){
 			RS = 1;
 			P1 = X;
-			if(X == 0x00){
-			P1 = '2';
-		}
+
 			E = 1;
 			atraso();
 			E = 0;
 		}
 
-		
 void escreve_comando(unsigned char com){
 	
 	RS = 0;
@@ -70,6 +72,11 @@ void escreve_mensagem(char* mensagem){
 	for(i = 0; mensagem[i] != 0 ; i++){
 		escreve_LCD(mensagem[i]);	
 	}
+	atraso();
 	
-	
+}
+
+void clear_LCD(){
+	escreve_comando(0x01);
+	atraso_clear();
 }

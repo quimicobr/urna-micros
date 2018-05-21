@@ -1,0 +1,709 @@
+BL51 BANKED LINKER/LOCATER V6.22                                                        05/18/2018  19:59:39  PAGE 1
+
+
+BL51 BANKED LINKER/LOCATER V6.22, INVOKED BY:
+C:\KEIL_V5_C51\C51\BIN\BL51.EXE .\Objects\STARTUP.obj, .\Objects\codigo_main.obj, .\Objects\lcd.obj, .\Objects\teclado.o
+>> bj, .\Objects\serial.obj, .\Objects\relogio.obj TO .\Objects\projeto_micros_gd PRINT (.\Listings\projeto_micros_gd.m5
+>> 1) RAMSIZE (256)
+
+
+MEMORY MODEL: SMALL
+
+
+INPUT MODULES INCLUDED:
+  .\Objects\STARTUP.obj (?C_STARTUP)
+  .\Objects\codigo_main.obj (CODIGO_MAIN)
+  .\Objects\lcd.obj (LCD)
+  .\Objects\teclado.obj (TECLADO)
+  .\Objects\serial.obj (SERIAL)
+  .\Objects\relogio.obj (RELOGIO)
+  C:\KEIL_V5_C51\C51\LIB\C51S.LIB (?C_INIT)
+  C:\KEIL_V5_C51\C51\LIB\C51S.LIB (?C?CLDPTR)
+  C:\KEIL_V5_C51\C51\LIB\C51S.LIB (?C?CLDOPTR)
+
+
+LINK MAP OF MODULE:  .\Objects\projeto_micros_gd (?C_STARTUP)
+
+
+            TYPE    BASE      LENGTH    RELOCATION   SEGMENT NAME
+            -----------------------------------------------------
+
+            * * * * * * *   D A T A   M E M O R Y   * * * * * * *
+            REG     0000H     0008H     ABSOLUTE     "REG BANK 0"
+            DATA    0008H     001FH     UNIT         ?DT?SERIAL
+            DATA    0027H     0008H     UNIT         _DATA_GROUP_
+            DATA    002FH     0006H     UNIT         ?DT?CODIGO_MAIN
+            DATA    0035H     0006H     UNIT         ?DT?_SOLICITA_SENADOR?SERIAL
+            DATA    003BH     0006H     UNIT         ?DT?_SOLICITA_GOVERNADOR?SERIAL
+            DATA    0041H     0006H     UNIT         ?DT?_SOLICITA_PRESIDENTE?SERIAL
+            DATA    0047H     0003H     UNIT         ?DT?_ESCREVE_MENSAGEM?LCD
+            DATA    004AH     0001H     UNIT         ?DT?TECLADO
+            DATA    004BH     0001H     UNIT         ?DT?RELOGIO
+            IDATA   004CH     0001H     UNIT         ?STACK
+
+            * * * * * * *  X D A T A   M E M O R Y  * * * * * * *
+            XDATA   0000H     0366H     UNIT         ?XD?CODIGO_MAIN
+
+            * * * * * * *   C O D E   M E M O R Y   * * * * * * *
+            CODE    0000H     0003H     ABSOLUTE     
+                    0003H     0020H                  *** GAP ***
+            CODE    0023H     0003H     ABSOLUTE     
+                    0026H     0005H                  *** GAP ***
+            CODE    002BH     0003H     ABSOLUTE     
+                    002EH     07D2H                  *** GAP ***
+            CODE    0800H     00D2H     UNIT         ?PR?VARREDURA?TECLADO
+            CODE    08D2H     00BCH     UNIT         ?PR?TRATA_DADOS?SERIAL
+            CODE    098EH     008CH     UNIT         ?C_C51STARTUP
+            CODE    0A1AH     0066H     UNIT         ?CO?CODIGO_MAIN
+            CODE    0A80H     0058H     UNIT         ?PR?TRATA_INTERRUPCAO_SERIAL?SERIAL
+            CODE    0AD8H     0046H     UNIT         ?C?LIB_CODE
+            CODE    0B1EH     003EH     UNIT         ?PR?ATUALIZA_RELOGIO?RELOGIO
+            CODE    0B5CH     0027H     UNIT         ?PR?_ESCREVE_SERIAL?SERIAL
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 2
+
+
+            CODE    0B83H     0026H     UNIT         ?PR?_ESCREVE_MENSAGEM?LCD
+            CODE    0BA9H     0022H     UNIT         ?PR?_SOLICITA_SENADOR?SERIAL
+            CODE    0BCBH     0022H     UNIT         ?PR?_SOLICITA_GOVERNADOR?SERIAL
+            CODE    0BEDH     0022H     UNIT         ?PR?_SOLICITA_PRESIDENTE?SERIAL
+            CODE    0C0FH     001CH     UNIT         ?PR?LCD_INIT?LCD
+            CODE    0C2BH     0018H     UNIT         ?PR?ATRASO_CLEAR?LCD
+            CODE    0C43H     0016H     UNIT         ?PR?ATRASO_1M?TECLADO
+            CODE    0C59H     0016H     UNIT         ?PR?CONFIGURA_SERIAL?SERIAL
+            CODE    0C6FH     0015H     UNIT         ?PR?ATRASO?LCD
+            CODE    0C84H     0014H     UNIT         ?PR?MAIN?CODIGO_MAIN
+            CODE    0C98H     0014H     UNIT         ?PR?_DEBOUNCING?TECLADO
+            CODE    0CACH     0014H     UNIT         ?PR?CONFIGURA_RELOGIO?RELOGIO
+            CODE    0CC0H     0013H     UNIT         ?C_INITSEG
+            CODE    0CD3H     000EH     UNIT         ?PR?LE_TECLADO?TECLADO
+            CODE    0CE1H     000CH     UNIT         ?PR?_ESCREVE_LCD?LCD
+            CODE    0CEDH     000BH     UNIT         ?PR?_ESCREVE_COMANDO?LCD
+            CODE    0CF8H     0009H     UNIT         ?CO?SERIAL
+            CODE    0D01H     0008H     UNIT         ?PR?CLEAR_LCD?LCD
+
+
+
+OVERLAY MAP OF MODULE:   .\Objects\projeto_micros_gd (?C_STARTUP)
+
+
+SEGMENT                                       DATA_GROUP 
+  +--> CALLED SEGMENT                       START    LENGTH
+-----------------------------------------------------------
+?C_C51STARTUP                               -----    -----
+  +--> ?PR?MAIN?CODIGO_MAIN
+  +--> ?C_INITSEG
+
+?PR?MAIN?CODIGO_MAIN                        0027H    0002H
+  +--> ?PR?CONFIGURA_SERIAL?SERIAL
+  +--> ?PR?CONFIGURA_RELOGIO?RELOGIO
+  +--> ?PR?LCD_INIT?LCD
+  +--> ?CO?CODIGO_MAIN
+  +--> ?PR?_ESCREVE_SERIAL?SERIAL
+
+?PR?LCD_INIT?LCD                            -----    -----
+  +--> ?PR?_ESCREVE_COMANDO?LCD
+  +--> ?PR?ATRASO_CLEAR?LCD
+
+?PR?_ESCREVE_COMANDO?LCD                    -----    -----
+  +--> ?PR?ATRASO?LCD
+
+?PR?_ESCREVE_SERIAL?SERIAL                  002CH    0003H
+
+*** NEW ROOT ***************************************************
+
+?PR?TRATA_INTERRUPCAO_SERIAL?SERIAL         -----    -----
+  +--> ?PR?TRATA_DADOS?SERIAL
+
+?PR?TRATA_DADOS?SERIAL                      -----    -----
+  +--> ?CO?SERIAL
+  +--> ?PR?_ESCREVE_SERIAL?SERIAL
+  +--> ?PR?_ESCREVE_LCD?LCD
+
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 3
+
+
+?PR?_ESCREVE_LCD?LCD                        -----    -----
+  +--> ?PR?ATRASO?LCD
+
+
+
+SYMBOL TABLE OF MODULE:  .\Objects\projeto_micros_gd (?C_STARTUP)
+
+  VALUE           TYPE          NAME
+  ----------------------------------
+
+  -------         MODULE        ?C_STARTUP
+  C:098EH         SEGMENT       ?C_C51STARTUP
+  I:004CH         SEGMENT       ?STACK
+  C:0000H         PUBLIC        ?C_STARTUP
+  D:00E0H         SYMBOL        ACC
+  D:00F0H         SYMBOL        B
+  D:0083H         SYMBOL        DPH
+  D:0082H         SYMBOL        DPL
+  N:0000H         SYMBOL        IBPSTACK
+  N:0100H         SYMBOL        IBPSTACKTOP
+  N:0080H         SYMBOL        IDATALEN
+  C:0991H         SYMBOL        IDATALOOP
+  N:0000H         SYMBOL        PBPSTACK
+  N:0100H         SYMBOL        PBPSTACKTOP
+  N:0000H         SYMBOL        PDATALEN
+  N:0000H         SYMBOL        PDATASTART
+  N:0000H         SYMBOL        PPAGE
+  N:0000H         SYMBOL        PPAGEENABLE
+  D:00A0H         SYMBOL        PPAGE_SFR
+  D:0081H         SYMBOL        SP
+  C:098EH         SYMBOL        STARTUP1
+  N:0000H         SYMBOL        XBPSTACK
+  N:0000H         SYMBOL        XBPSTACKTOP
+  N:0000H         SYMBOL        XDATALEN
+  N:0000H         SYMBOL        XDATASTART
+  C:0000H         LINE#         126
+  C:098EH         LINE#         133
+  C:0990H         LINE#         134
+  C:0991H         LINE#         135
+  C:0992H         LINE#         136
+  C:0994H         LINE#         185
+  C:0997H         LINE#         196
+  -------         ENDMOD        ?C_STARTUP
+
+  -------         MODULE        CODIGO_MAIN
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  D:002FH         PUBLIC        estado
+  D:0030H         PUBLIC        respostaPC
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  D:0031H         PUBLIC        minuto
+  C:0C84H         PUBLIC        main
+  D:0032H         PUBLIC        hora
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 4
+
+
+  X:0000H         PUBLIC        presidente
+  X:0122H         PUBLIC        governador
+  C:0A26H         PUBLIC        codigo_eleitor
+  D:00C8H         PUBLIC        T2CON
+  X:0244H         PUBLIC        senador
+  D:0033H         PUBLIC        OLU
+  D:0034H         PUBLIC        segundo
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          MAIN
+  -------         DO            
+  D:0027H         SYMBOL        c
+  D:0028H         SYMBOL        UB_escrito
+  -------         ENDDO         
+  C:0C84H         LINE#         105
+  C:0C84H         LINE#         109
+  C:0C87H         LINE#         112
+  C:0C8AH         LINE#         115
+  C:0C8DH         LINE#         117
+  C:0C96H         LINE#         119
+  C:0C96H         LINE#         121
+  -------         ENDPROC       MAIN
+  -------         ENDMOD        CODIGO_MAIN
+
+  -------         MODULE        LCD
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  C:0C6FH         PUBLIC        atraso
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  B:00B0H.6       PUBLIC        RS
+  C:0B83H         PUBLIC        _escreve_mensagem
+  C:0CE1H         PUBLIC        _escreve_LCD
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  C:0CEDH         PUBLIC        _escreve_comando
+  C:0D01H         PUBLIC        clear_LCD
+  B:00B0H.7       PUBLIC        E
+  B:0088H.5       PUBLIC        TF0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  C:0C0FH         PUBLIC        LCD_init
+  C:0C2BH         PUBLIC        atraso_clear
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          LCD_INIT
+  C:0C0FH         LINE#         11
+  C:0C0FH         LINE#         13
+  C:0C14H         LINE#         14
+  C:0C19H         LINE#         15
+  C:0C1EH         LINE#         16
+  C:0C23H         LINE#         17
+  C:0C28H         LINE#         18
+  -------         ENDPROC       LCD_INIT
+  -------         PROC          ATRASO
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 5
+
+
+  C:0C6FH         LINE#         22
+  C:0C6FH         LINE#         24
+  C:0C71H         LINE#         25
+  C:0C73H         LINE#         26
+  C:0C76H         LINE#         27
+  C:0C79H         LINE#         30
+  C:0C7CH         LINE#         31
+  C:0C7EH         LINE#         32
+  C:0C81H         LINE#         33
+  C:0C83H         LINE#         34
+  -------         ENDPROC       ATRASO
+  -------         PROC          ATRASO_CLEAR
+  C:0C2BH         LINE#         36
+  C:0C2BH         LINE#         38
+  C:0C2DH         LINE#         39
+  C:0C2FH         LINE#         40
+  C:0C32H         LINE#         41
+  C:0C35H         LINE#         44
+  C:0C38H         LINE#         45
+  C:0C3BH         LINE#         46
+  C:0C3DH         LINE#         47
+  C:0C40H         LINE#         48
+  C:0C42H         LINE#         49
+  -------         ENDPROC       ATRASO_CLEAR
+  -------         PROC          _ESCREVE_LCD
+  D:0007H         SYMBOL        X
+  C:0CE1H         LINE#         51
+  C:0CE1H         LINE#         52
+  C:0CE3H         LINE#         53
+  C:0CE5H         LINE#         55
+  C:0CE7H         LINE#         56
+  C:0CEAH         LINE#         57
+  C:0CECH         LINE#         58
+  -------         ENDPROC       _ESCREVE_LCD
+  -------         PROC          _ESCREVE_COMANDO
+  D:0007H         SYMBOL        com
+  C:0CEDH         LINE#         60
+  C:0CEDH         LINE#         62
+  C:0CEFH         LINE#         63
+  C:0CF1H         LINE#         64
+  C:0CF3H         LINE#         65
+  C:0CF5H         LINE#         66
+  -------         ENDPROC       _ESCREVE_COMANDO
+  -------         PROC          _ESCREVE_MENSAGEM
+  D:0047H         SYMBOL        mensagem
+  -------         DO            
+  D:0006H         SYMBOL        i
+  -------         ENDDO         
+  C:0B83H         LINE#         69
+  C:0B89H         LINE#         72
+  C:0BA0H         LINE#         73
+  C:0BA3H         LINE#         74
+  C:0BA6H         LINE#         75
+  -------         ENDPROC       _ESCREVE_MENSAGEM
+  -------         PROC          CLEAR_LCD
+  C:0D01H         LINE#         79
+  C:0D01H         LINE#         80
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 6
+
+
+  C:0D06H         LINE#         81
+  -------         ENDPROC       CLEAR_LCD
+  -------         ENDMOD        LCD
+
+  -------         MODULE        TECLADO
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0080H         PUBLIC        P0
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  C:0C43H         PUBLIC        atraso_1m
+  D:00A8H         PUBLIC        IE
+  C:0CD3H         PUBLIC        le_teclado
+  D:00B8H         PUBLIC        IP
+  C:0C98H         PUBLIC        _debouncing
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  B:0088H.5       PUBLIC        TF0
+  D:008CH         PUBLIC        TH0
+  D:008AH         PUBLIC        TL0
+  C:0800H         PUBLIC        varredura
+  B:0088H.4       PUBLIC        TR0
+  D:00C8H         PUBLIC        T2CON
+  B:0080H.0       PUBLIC        C1
+  B:0080H.1       PUBLIC        C2
+  B:0080H.2       PUBLIC        C3
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          LE_TECLADO
+  -------         DO            
+  D:004AH         SYMBOL        tecla
+  D:0007H         SYMBOL        tecla_atual
+  -------         ENDDO         
+  C:0CD3H         LINE#         14
+  C:0CD3H         LINE#         17
+  C:0CD6H         LINE#         18
+  C:0CDBH         LINE#         19
+  C:0CDDH         LINE#         20
+  C:0CDEH         LINE#         21
+  C:0CDEH         LINE#         22
+  C:0CE0H         LINE#         23
+  -------         ENDPROC       LE_TECLADO
+  -------         PROC          ATRASO_1M
+  C:0C43H         LINE#         25
+  C:0C43H         LINE#         27
+  C:0C45H         LINE#         28
+  C:0C47H         LINE#         29
+  C:0C4AH         LINE#         30
+  C:0C4DH         LINE#         33
+  C:0C50H         LINE#         34
+  C:0C53H         LINE#         35
+  C:0C55H         LINE#         36
+  C:0C58H         LINE#         38
+  -------         ENDPROC       ATRASO_1M
+  -------         PROC          _DEBOUNCING
+  D:0007H         SYMBOL        tecla
+  -------         DO            
+  D:0006H         SYMBOL        i
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 7
+
+
+  -------         ENDDO         
+  C:0C98H         LINE#         40
+  C:0C98H         LINE#         42
+  C:0C9AH         LINE#         43
+  C:0C9AH         LINE#         45
+  C:0C9FH         LINE#         46
+  C:0CA2H         LINE#         47
+  C:0CA2H         LINE#         48
+  C:0CA5H         LINE#         50
+  C:0CA9H         LINE#         51
+  C:0CABH         LINE#         53
+  -------         ENDPROC       _DEBOUNCING
+  -------         PROC          VARREDURA
+  C:0800H         LINE#         55
+  C:0800H         LINE#         56
+  C:0802H         LINE#         57
+  C:0804H         LINE#         58
+  C:0806H         LINE#         59
+  C:0819H         LINE#         60
+  C:0819H         LINE#         61
+  C:0821H         LINE#         62
+  C:0824H         LINE#         63
+  C:0824H         LINE#         64
+  C:082CH         LINE#         65
+  C:082FH         LINE#         66
+  C:082FH         LINE#         67
+  C:0837H         LINE#         68
+  C:083AH         LINE#         69
+  C:083AH         LINE#         70
+  C:0842H         LINE#         71
+  C:0845H         LINE#         72
+  C:0845H         LINE#         74
+  C:0847H         LINE#         75
+  C:0849H         LINE#         76
+  C:084BH         LINE#         77
+  C:085EH         LINE#         78
+  C:085EH         LINE#         79
+  C:0866H         LINE#         80
+  C:0869H         LINE#         81
+  C:0869H         LINE#         82
+  C:0871H         LINE#         83
+  C:0874H         LINE#         84
+  C:0874H         LINE#         85
+  C:087CH         LINE#         86
+  C:087FH         LINE#         87
+  C:087FH         LINE#         88
+  C:0887H         LINE#         89
+  C:088AH         LINE#         90
+  C:088AH         LINE#         92
+  C:088CH         LINE#         93
+  C:088EH         LINE#         94
+  C:0890H         LINE#         95
+  C:08A3H         LINE#         96
+  C:08A3H         LINE#         97
+  C:08ABH         LINE#         98
+  C:08AEH         LINE#         99
+  C:08AEH         LINE#         100
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 8
+
+
+  C:08B6H         LINE#         101
+  C:08B9H         LINE#         102
+  C:08B9H         LINE#         103
+  C:08C1H         LINE#         104
+  C:08C4H         LINE#         105
+  C:08C4H         LINE#         106
+  C:08CCH         LINE#         107
+  C:08CFH         LINE#         108
+  C:08CFH         LINE#         110
+  C:08D1H         LINE#         111
+  -------         ENDPROC       VARREDURA
+  -------         ENDMOD        TECLADO
+
+  -------         MODULE        SERIAL
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  C:08D2H         PUBLIC        trata_dados
+  B:00A8H.4       PUBLIC        ES
+  D:00B8H         PUBLIC        IP
+  C:0A80H         PUBLIC        trata_interrupcao_serial
+  B:0098H.0       PUBLIC        RI
+  B:0098H.1       PUBLIC        TI
+  C:0C59H         PUBLIC        configura_serial
+  C:0BA9H         PUBLIC        _solicita_senador
+  D:0099H         PUBLIC        SBUF
+  D:0098H         PUBLIC        SCON
+  D:0089H         PUBLIC        TMOD
+  D:0088H         PUBLIC        TCON
+  D:008DH         PUBLIC        TH1
+  D:0009H         PUBLIC        fifo_recepcao
+  D:008BH         PUBLIC        TL1
+  C:0B5CH         PUBLIC        _escreve_serial
+  B:0088H.6       PUBLIC        TR1
+  D:00C8H         PUBLIC        T2CON
+  C:0BEDH         PUBLIC        _solicita_presidente
+  D:00D0H         PUBLIC        PSW
+  C:0BCBH         PUBLIC        _solicita_governador
+  -------         PROC          CONFIGURA_SERIAL
+  C:0C59H         LINE#         27
+  C:0C59H         LINE#         29
+  C:0C5CH         LINE#         30
+  C:0C5FH         LINE#         31
+  C:0C62H         LINE#         32
+  C:0C65H         LINE#         33
+  C:0C67H         LINE#         35
+  C:0C6AH         LINE#         36
+  C:0C6CH         LINE#         37
+  C:0C6EH         LINE#         38
+  -------         ENDPROC       CONFIGURA_SERIAL
+  -------         PROC          _ESCREVE_SERIAL
+  D:002CH         SYMBOL        mensagem
+  -------         DO            
+  D:0007H         SYMBOL        i
+  -------         ENDDO         
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 9
+
+
+  C:0B5CH         LINE#         40
+  C:0B62H         LINE#         42
+  C:0B78H         LINE#         43
+  C:0B7AH         LINE#         44
+  C:0B7DH         LINE#         45
+  C:0B7FH         LINE#         46
+  C:0B82H         LINE#         47
+  -------         ENDPROC       _ESCREVE_SERIAL
+  -------         PROC          TRATA_INTERRUPCAO_SERIAL
+  -------         DO            
+  D:0008H         SYMBOL        is
+  -------         ENDDO         
+  C:0A80H         LINE#         53
+  C:0A9DH         LINE#         55
+  C:0AA0H         LINE#         56
+  C:0AA2H         LINE#         57
+  C:0AA9H         LINE#         58
+  C:0AB1H         LINE#         59
+  C:0AB3H         LINE#         60
+  C:0AB6H         LINE#         61
+  C:0AB6H         LINE#         62
+  C:0AB8H         LINE#         63
+  C:0AB8H         LINE#         64
+  C:0ABBH         LINE#         65
+  C:0ABDH         LINE#         66
+  C:0ABDH         LINE#         67
+  -------         ENDPROC       TRATA_INTERRUPCAO_SERIAL
+  -------         PROC          TRATA_DADOS
+  C:08D2H         LINE#         71
+  C:08D2H         LINE#         74
+  C:08DCH         LINE#         75
+  C:08DFH         LINE#         76
+  C:08E8H         LINE#         77
+  C:08E8H         LINE#         80
+  C:08F2H         LINE#         81
+  C:08F5H         LINE#         82
+  C:08FEH         LINE#         83
+  C:08FEH         LINE#         86
+  C:0908H         LINE#         88
+  C:090BH         LINE#         89
+  C:0910H         LINE#         90
+  C:0913H         LINE#         91
+  C:0918H         LINE#         92
+  C:0921H         LINE#         94
+  C:0921H         LINE#         96
+  C:0921H         LINE#         100
+  C:0921H         LINE#         102
+  C:092BH         LINE#         104
+  C:0930H         LINE#         105
+  C:0933H         LINE#         106
+  C:0933H         LINE#         107
+  C:0933H         LINE#         109
+  C:093DH         LINE#         111
+  C:0942H         LINE#         112
+  C:0945H         LINE#         113
+  C:0945H         LINE#         114
+  C:0945H         LINE#         116
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 10
+
+
+  C:094FH         LINE#         118
+  C:0954H         LINE#         119
+  C:0957H         LINE#         120
+  C:0957H         LINE#         121
+  C:0957H         LINE#         123
+  C:0961H         LINE#         125
+  C:0966H         LINE#         126
+  C:0969H         LINE#         127
+  C:0969H         LINE#         128
+  C:0969H         LINE#         130
+  C:0973H         LINE#         132
+  C:0978H         LINE#         133
+  C:097BH         LINE#         134
+  C:097BH         LINE#         135
+  C:097BH         LINE#         137
+  C:0985H         LINE#         139
+  C:098AH         LINE#         140
+  C:098DH         LINE#         141
+  C:098DH         LINE#         142
+  C:098DH         LINE#         144
+  -------         ENDPROC       TRATA_DADOS
+  -------         PROC          _SOLICITA_SENADOR
+  D:0001H         SYMBOL        codigo
+  -------         DO            
+  D:0035H         SYMBOL        mensagem
+  -------         ENDDO         
+  C:0BA9H         LINE#         146
+  C:0BA9H         LINE#         149
+  C:0BACH         LINE#         150
+  C:0BAFH         LINE#         151
+  C:0BB2H         LINE#         152
+  C:0BB7H         LINE#         153
+  C:0BBFH         LINE#         154
+  C:0BC2H         LINE#         155
+  -------         ENDPROC       _SOLICITA_SENADOR
+  -------         PROC          _SOLICITA_GOVERNADOR
+  D:0001H         SYMBOL        codigo
+  -------         DO            
+  D:003BH         SYMBOL        mensagem
+  -------         ENDDO         
+  C:0BCBH         LINE#         159
+  C:0BCBH         LINE#         162
+  C:0BCEH         LINE#         163
+  C:0BD1H         LINE#         164
+  C:0BD4H         LINE#         165
+  C:0BD9H         LINE#         166
+  C:0BE1H         LINE#         167
+  C:0BE4H         LINE#         168
+  -------         ENDPROC       _SOLICITA_GOVERNADOR
+  -------         PROC          _SOLICITA_PRESIDENTE
+  D:0001H         SYMBOL        codigo
+  -------         DO            
+  D:0041H         SYMBOL        mensagem
+  -------         ENDDO         
+  C:0BEDH         LINE#         171
+  C:0BEDH         LINE#         174
+  C:0BF0H         LINE#         175
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 11
+
+
+  C:0BF3H         LINE#         176
+  C:0BF6H         LINE#         177
+  C:0BFBH         LINE#         178
+  C:0C03H         LINE#         179
+  C:0C06H         LINE#         180
+  -------         ENDPROC       _SOLICITA_PRESIDENTE
+  -------         ENDMOD        SERIAL
+
+  -------         MODULE        RELOGIO
+  C:0000H         SYMBOL        _ICE_DUMMY_
+  D:0090H         PUBLIC        P1
+  D:00B0H         PUBLIC        P3
+  B:00A8H.7       PUBLIC        EA
+  D:00A8H         PUBLIC        IE
+  D:00B8H         PUBLIC        IP
+  C:0CACH         PUBLIC        configura_relogio
+  D:00CBH         PUBLIC        RCAP2H
+  D:00CAH         PUBLIC        RCAP2L
+  D:0098H         PUBLIC        SCON
+  D:0088H         PUBLIC        TCON
+  C:0B1EH         PUBLIC        atualiza_relogio
+  B:00A8H.5       PUBLIC        ET2
+  B:00C8H.7       PUBLIC        TF2
+  D:00CDH         PUBLIC        TH2
+  D:00CCH         PUBLIC        TL2
+  B:00C8H.2       PUBLIC        TR2
+  D:00C8H         PUBLIC        T2CON
+  D:00D0H         PUBLIC        PSW
+  -------         PROC          CONFIGURA_RELOGIO
+  C:0CACH         LINE#         10
+  C:0CACH         LINE#         11
+  C:0CAFH         LINE#         12
+  C:0CB1H         LINE#         13
+  C:0CB4H         LINE#         14
+  C:0CB6H         LINE#         15
+  C:0CB9H         LINE#         16
+  C:0CBBH         LINE#         18
+  C:0CBDH         LINE#         19
+  C:0CBFH         LINE#         20
+  -------         ENDPROC       CONFIGURA_RELOGIO
+  -------         PROC          ATUALIZA_RELOGIO
+  -------         DO            
+  D:004BH         SYMBOL        count
+  -------         ENDDO         
+  C:0B1EH         LINE#         22
+  C:0B22H         LINE#         25
+  C:0B24H         LINE#         28
+  C:0B26H         LINE#         30
+  C:0B2FH         LINE#         31
+  C:0B32H         LINE#         32
+  C:0B34H         LINE#         33
+  C:0B3CH         LINE#         34
+  C:0B3FH         LINE#         35
+  C:0B41H         LINE#         36
+  C:0B49H         LINE#         37
+  C:0B4CH         LINE#         38
+  C:0B54H         LINE#         39
+BL51 BANKED LINKER/LOCATER V6.22                                                      05/18/2018  19:59:39  PAGE 12
+
+
+  C:0B57H         LINE#         40
+  C:0B57H         LINE#         41
+  C:0B57H         LINE#         42
+  C:0B57H         LINE#         43
+  C:0B57H         LINE#         46
+  -------         ENDPROC       ATUALIZA_RELOGIO
+  -------         ENDMOD        RELOGIO
+
+  -------         MODULE        ?C?CLDPTR
+  C:0AD8H         PUBLIC        ?C?CLDPTR
+  -------         ENDMOD        ?C?CLDPTR
+
+  -------         MODULE        ?C?CLDOPTR
+  C:0AF1H         PUBLIC        ?C?CLDOPTR
+  -------         ENDMOD        ?C?CLDOPTR
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_ESCREVE_MENSAGEM?LCD
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?CLEAR_LCD?LCD
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?LE_TECLADO?TECLADO
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SOLICITA_SENADOR?SERIAL
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SOLICITA_GOVERNADOR?SERIAL
+
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_SOLICITA_PRESIDENTE?SERIAL
+
+*** WARNING L15: MULTIPLE CALL TO SEGMENT
+    SEGMENT: ?PR?_ESCREVE_SERIAL?SERIAL
+    CALLER1: ?C_C51STARTUP
+    CALLER2: ?PR?TRATA_INTERRUPCAO_SERIAL?SERIAL
+
+******************************************************************************
+* RESTRICTED VERSION WITH 0800H BYTE CODE SIZE LIMIT; USED: 044BH BYTE (53%) *
+******************************************************************************
+
+Program Size: data=77.0 xdata=870 code=1298
+LINK/LOCATE RUN COMPLETE.  7 WARNING(S),  0 ERROR(S)
