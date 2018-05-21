@@ -1,4 +1,4 @@
-C51 COMPILER V9.56.0.0   LCD                                                               05/18/2018 19:59:39 PAGE 1   
+C51 COMPILER V9.56.0.0   LCD                                                               05/21/2018 16:25:11 PAGE 1   
 
 
 C51 COMPILER V9.56.0.0, COMPILATION OF MODULE LCD
@@ -11,87 +11,86 @@ line level    source
    1          // Nomes: Davi Nachtigall Lazzarotto   216628
    2          //        Gustavo Fernandes (230357)      
    3          
-   4          
-   5          #include<reg52.h>
-   6          #include<lcd.h>
-   7          
-   8          sbit RS =P3^6;
-   9          sbit E =P3^7;
-  10          
-  11          void LCD_init(){  
-  12   1          
+   4          #include<reg52.h>
+   5          #include<lcd.h>
+   6          
+   7          sbit RS =P3^6;
+   8          sbit E =P3^7;
+   9          
+  10          void LCD_init(){  
+  11   1          
+  12   1       escreve_comando(0x38);
   13   1       escreve_comando(0x38);
-  14   1       escreve_comando(0x38);
-  15   1       escreve_comando(0x0E);
-  16   1       escreve_comando(0x06);
-  17   1       escreve_comando(0x01);
-  18   1       atraso_clear();
-  19   1      
-  20   1      }
-  21          
-  22          void atraso(){  
-  23   1        
-  24   1          TR0 = 0;
-  25   1          TF0 = 0; //limpa a flag de estouro
-  26   1          TMOD &= 0xF0;
-  27   1          TMOD |= 0x02; //timer de 8 bits com recarga automática  
-  28   1        //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
-  29   1        // 40 us -> 74 ciclos - 256 - 74 ciclos = 182 -> valor a ser colocado no registrador
-  30   1          TL0 = 182;
-  31   1          TR0 = 1; //liga o timer
-  32   1          while(TF0 == 0);
-  33   1          TR0 = 0;
-  34   1        }
-  35            
-  36          void atraso_clear(){  
-  37   1        
-  38   1          TR0 = 0;
-  39   1          TF0 = 0; //limpa a flag de estouro
-  40   1          TMOD &= 0xF0;
-  41   1          TMOD |= 0x01;
-  42   1         //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
-  43   1         // 1650 us -> 3051 ciclos = 62485 (F415) -> valor a ser colocado no registrador
-  44   1          TH0 = 0xF4;
-  45   1          TL0 = 0x15;
-  46   1          TR0 = 1; //liga o timer
-  47   1          while(TF0 == 0);
-  48   1          TR0 = 0;
-  49   1          }
-  50              
-  51          void escreve_LCD(char X){
-  52   1            RS = 1;
-  53   1            P1 = X;
-  54   1      
-C51 COMPILER V9.56.0.0   LCD                                                               05/18/2018 19:59:39 PAGE 2   
+  14   1       escreve_comando(0x0E);
+  15   1       escreve_comando(0x06);
+  16   1       escreve_comando(0x01);
+  17   1       atraso_clear();
+  18   1      
+  19   1      }
+  20          
+  21          void atraso(){  
+  22   1        
+  23   1          TR0 = 0;
+  24   1          TF0 = 0; //limpa a flag de estouro
+  25   1          TMOD &= 0xF0;
+  26   1          TMOD |= 0x02; //timer de 8 bits com recarga automática  
+  27   1        //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
+  28   1        // 40 us -> 74 ciclos - 256 - 74 ciclos = 182 -> valor a ser colocado no registrador
+  29   1          TL0 = 182;
+  30   1          TR0 = 1; //liga o timer
+  31   1          while(TF0 == 0);
+  32   1          TR0 = 0;
+  33   1        }
+  34            
+  35          void atraso_clear(){  
+  36   1        
+  37   1          TR0 = 0;
+  38   1          TF0 = 0; //limpa a flag de estouro
+  39   1          TMOD &= 0xF0;
+  40   1          TMOD |= 0x01;
+  41   1         //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
+  42   1         // 1650 us -> 3051 ciclos = 62485 (F415) -> valor a ser colocado no registrador
+  43   1          TH0 = 0xF4;
+  44   1          TL0 = 0x15;
+  45   1          TR0 = 1; //liga o timer
+  46   1          while(TF0 == 0);
+  47   1          TR0 = 0;
+  48   1          }
+  49              
+  50          void escreve_LCD(char X){
+  51   1            RS = 1;
+  52   1            P1 = X;
+  53   1      
+  54   1            E = 1;
+C51 COMPILER V9.56.0.0   LCD                                                               05/21/2018 16:25:11 PAGE 2   
 
-  55   1            E = 1;
-  56   1            atraso();
-  57   1            E = 0;
-  58   1          }
-  59          
-  60          void escreve_comando(unsigned char com){
-  61   1        
-  62   1        RS = 0;
-  63   1        P1 = com;
-  64   1        E = 1;
-  65   1        E = 0;
-  66   1        atraso();
-  67   1      }
-  68          
-  69          void escreve_mensagem(char* mensagem){
-  70   1        
-  71   1        char i;
-  72   1        for(i = 0; mensagem[i] != 0 ; i++){
-  73   2          escreve_LCD(mensagem[i]); 
-  74   2        }
-  75   1        atraso();
-  76   1        
-  77   1      }
-  78          
-  79          void clear_LCD(){
-  80   1        escreve_comando(0x01);
-  81   1        atraso_clear();
-  82   1      }
+  55   1            atraso();
+  56   1            E = 0;
+  57   1          }
+  58          
+  59          void escreve_comando(unsigned char com){
+  60   1        
+  61   1        RS = 0;
+  62   1        P1 = com;
+  63   1        E = 1;
+  64   1        E = 0;
+  65   1        atraso();
+  66   1      }
+  67          
+  68          void escreve_mensagem(char* mensagem){
+  69   1        
+  70   1        char i;
+  71   1        for(i = 0; mensagem[i] != 0 ; i++){
+  72   2          escreve_LCD(mensagem[i]); 
+  73   2        }
+  74   1        atraso();
+  75   1        
+  76   1      }
+  77          
+  78          void clear_LCD(){
+  79   1        escreve_comando(0x01);
+  80   1        atraso_clear();
+  81   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

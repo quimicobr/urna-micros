@@ -1,4 +1,4 @@
-#include<reg52.h>
+/*#include<reg52.h>
 #include<relogio.h>
 
 // O tempo de estouro do timer 2 com 16 bits é de 35.5555555 ms
@@ -43,4 +43,4 @@ void atualiza_relogio() interrupt 5 {
 	}
 	
 	
-}
+}*/

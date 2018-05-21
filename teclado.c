@@ -1,4 +1,4 @@
-#include<reg52.h>
+/*#include<reg52.h>
 #include<teclado.h>
 
 
@@ -109,3 +109,4 @@ char varredura(){
 	
 	return '\0';
 }
+*/

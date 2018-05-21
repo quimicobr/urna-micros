@@ -1,0 +1,70 @@
+C51 COMPILER V9.56.0.0   MYSTRING                                                          05/21/2018 16:25:11 PAGE 1   
+
+
+C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MYSTRING
+OBJECT MODULE PLACED IN .\Objects\myString.obj
+COMPILER INVOKED BY: C:\Keil_v5_C51\C51\BIN\C51.EXE myString.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+                    -ngs\myString.lst) TABS(2) OBJECT(.\Objects\myString.obj)
+
+line level    source
+
+   1          #include <myString.h>
+   2          
+   3          char len_string(char* string){
+   4   1        
+   5   1        char i;
+   6   1        for (i = 0; string[i] != '\0'; i++){}
+   7   1        return i;
+   8   1        
+   9   1      }
+  10          
+  11          char maior(char arg1, char arg2){
+  12   1        if (arg1 >arg2) return arg1;
+  13   1        else return arg2;
+  14   1      }
+  15                
+  16          char compara_string(char* string1,char* string2){
+  17   1        
+  18   1        char i, out = 1;
+  19   1        char lim;
+  20   1        lim = maior(len_string(string1), len_string(string2));
+  21   1        
+  22   1        for (i = 0; i< lim; i++){
+  23   2          if(string1[i] != string2[i]){
+  24   3            return 0;
+  25   3          }
+  26   2        }
+  27   1        return 1;
+  28   1      } 
+  29          
+  30          void copia_string(char* alvo, char* valor){
+  31   1        
+  32   1        char i;
+  33   1        for (i = 0; valor[i] != '\0'; i++) alvo[i] = valor[i];
+  34   1      
+  35   1      }
+  36          
+  37          void clear_string(char* string){
+  38   1        
+  39   1        char i;
+  40   1        for (i = 0; string[i] != '\0'; i++){
+  41   2          string[i] = '\0';
+  42   2        }
+  43   1        
+  44   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    242    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----      22
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+C51 COMPILER V9.56.0.0   MYSTRING                                                          05/21/2018 16:25:11 PAGE 2   
+
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

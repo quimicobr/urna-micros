@@ -3,6 +3,7 @@
 ".\Objects\lcd.obj",
 ".\Objects\teclado.obj",
 ".\Objects\serial.obj",
-".\Objects\relogio.obj" 
+".\Objects\relogio.obj",
+".\Objects\myString.obj" 
 TO ".\Objects\projeto_micros_gd" 
 PRINT(".\Listings\projeto_micros_gd.m51") RAMSIZE(256) 

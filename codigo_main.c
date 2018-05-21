@@ -2,9 +2,8 @@
 #include<lcd.h>
 #include<teclado.h>
 #include<serial.h>
-#include<relogio.h>
-#include<stdio.h>
-#include<string.h>
+//#include<relogio.h>
+#include<myString.h>
 
 
 //TIMER0: uso geral (atraso,...)
@@ -37,9 +36,19 @@ char respostaPC;
 #define PG 5 
 #define PP 6 
 
-data char fifo_recepcao[30];
+idata char pacote[30];
 
 sbit BUZZER = P3^3;
+
+void clear_pacote(){
+	
+	char i;
+	for (i = 0; pacote[i] != '\0' && i<30; i++){
+		pacote[i] = '\0';
+	}
+		
+	
+}
 
 void configura_serial();
 
@@ -103,96 +112,117 @@ short code codigo_eleitor [] = {262659, 206603, 244444, 216628,
 
 //Inicialização: configurar serial, relógio, LCD e pedir os dados de todos os candidatos possíveis 
 
-char len_string(char* string){
-	
-	for (i = 0; string[i] != 0; i++)
-	return i;
-	
-}
-
-char maior(char arg1, char arg2){
-	if (arg1 >arg2) return arg1;
-	else return arg2;
-}
-			
-char compara_string(char* string1,char* string2){
-	
-	char i, out = 1;
-	char lim;
-	lim = maior(len_string(string1), len_string(string2));
-	
-	for (i = 0; i< lim; i++){
-		if(string1[i] != string2[i]){
-			return 0;
-		}
-	}
-	return 1;
-
-
-
-}	
-			
 void varredura_candidatos(){
 	
 	char d0, d1;
-	char d[2];
+	char d[3];
 	char comprimento, i, inicio_par;
 	char nome[20];
 	char partido[5];
+	char pos_sen = 0, pos_gov = 0, pos_pres = 0;
 
-	for (d0 = '0'; d0 <= '9'; d0++){
+	for (d0 = '0'; d0 <= '1'; d0++){
 		
 		d[0] = d0;
 		for (d1 = '0'; d1 <= '9'; d1++){
 			
 			d[1] = d1;
+			d[2] = '\0';
+			// ---------------------------
 			solicita_senador(d);
 			while (respostaPC != OK);
 			//Pega o dado do senador e ve se nao é nulo
 			//Se não for, armazena no vetor de struct
-			comprimento = fifo_recepcao[2];
 			
-			for (i = 3; fifo_recepcao[i] != 0; i++){
-				nome[i-3] = fifo_recepcao[i];
+			comprimento = pacote[2];
+			
+			for (i = 0; pacote[i+3] != ' ' ; i++){
+				nome[i] = pacote[i+3];
 			}
-			inicio_par = i + 1;
-			for (i = inicio_par; fifo_recepcao[i] != 0; i++){
-				nome[i-inicio_par] = fifo_recepcao[i];
+			inicio_par = i + 1; 
+			for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+				partido[i] = pacote[i+inicio_par];
 			}
 			
-			if(
-		
 			
+			if(!compara_string(nome,"NULO")){
+				copia_string(senador[pos_sen].nome, nome);
+				copia_string(senador[pos_sen].partido, partido);
+				copia_string(senador[pos_sen].nPartido, d);
+			}
+			clear_string(pacote);
+			clear_string(nome);
+			clear_string(partido);
+			// ---------------------------
 			solicita_governador(d);
+			
+			while (respostaPC != OK);
+			//Pega o dado do senador e ve se nao é nulo
+			//Se não for, armazena no vetor de struct
+			comprimento = pacote[2];
+			
+			for (i = 0; pacote[i+3] != ' '; i++){
+				nome[i] = pacote[i+3];
+			}
+			inicio_par = i + 1; 
+			for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+				partido[i] = pacote[i+inicio_par];
+			}
+			
+			clear_pacote();
+			
+			if(!compara_string(nome,"NULO")){
+				copia_string(governador[pos_sen].nome, nome);
+				copia_string(governador[pos_sen].partido, partido);
+				copia_string(governador[pos_sen].nPartido, d);
+			}
+			
+			// ---------------------------
 			solicita_presidente(d);
 			
+			while (respostaPC != OK);
+			//Pega o dado do senador e ve se nao é nulo
+			//Se não for, armazena no vetor de struct
+			comprimento = pacote[2];
 			
+			for (i = 0; pacote[i+3] != ' '; i++){
+				nome[i] = pacote[i+3];
+			}
+			inicio_par = i + 1; 
+			for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+				partido[i] = pacote[i+inicio_par];
+			}
 			
+			clear_pacote();
+			
+			if(!compara_string(nome,"NULO")){
+				copia_string(presidente[pos_sen].nome, nome);
+				copia_string(presidente[pos_sen].partido, partido);
+				copia_string(presidente[pos_sen].nPartido, d);
+			}
+
 		}	
 	}
-	
-	
 }
-			
-	
-
 
 void main(){
-	char c;
-	char UB_escrito;
 		//Configura a porta serial
 	configura_serial();
 	
 	//Configura o relogio
-	configura_relogio();
+//	configura_relogio();
 	
 	//Inicializa o visor LCD
 	LCD_init();
 
 	escreve_serial("Incixializa");
+	varredura_candidatos();
+	
 	
 	while(1){
 
+			
+		
 	}
 		
 }

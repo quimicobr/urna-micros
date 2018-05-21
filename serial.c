@@ -1,6 +1,7 @@
 #include<serial.h>
 #include<lcd.h>
 #include<reg52.h>
+#include<myString.h>
 
 //0 	EXTERNAL INT 0 	0003h
 //1 	TIMER/COUNTER 0 	000Bh
@@ -21,8 +22,7 @@
 #define PG 5 
 #define PP 6 
 
-
-
+char fifo_recepcao[30];
 
 void configura_serial(){
 	//configura o timer 1
@@ -46,7 +46,11 @@ char i;
 	}
 }
 
-
+void clear_FIFO(){
+	char i;
+	for (i = 0; fifo_recepcao[i] != '\0' && i<30; i++) fifo_recepcao[i] = '\0';
+	
+}
 
 
 
@@ -55,46 +59,43 @@ void trata_interrupcao_serial() interrupt 4 {
 	if(RI == 1){
 		RI = 0;
 		fifo_recepcao[is] = SBUF;
-		if (fifo_recepcao[is+1] == '\0'){
-			is = 0;
-			trata_dados();
+		is++;
+		if (trata_dados()){
+			clear_FIFO();
+			is = 0;			
 		}
-		is = is + 1;
 	}
-	if(TI == 1){
-	TI = 0;
-	}	
 }
 
 //No momento, a confirmação é enviada assim que o computador envia o comando
 //O 
-void trata_dados(){
+char trata_dados(){
 	
 	//Libera urna
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'L'){
 		OLU = 1; //Ordem de Liberar Urna 
 		escreve_serial("ML");
+		return 1;
 	}
 	
 	//Bloqueia urna
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'B'){
 		OLU = 0; //Ordem de Liberar Urna
 		escreve_serial("MB");
+		return 1;
 	}
 	
 	//Atualiza o horario
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'H'){
 		
 		minuto = fifo_recepcao[3];
-		escreve_LCD(minuto);
 		hora = fifo_recepcao[2];
-		escreve_LCD(hora);
 		escreve_serial("MH");
+		return 1;
 		
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'U'){
-		
 		//Envia boletim de urna
 		
 	}
@@ -104,6 +105,7 @@ void trata_dados(){
 		if (respostaPC == PE){
 			respostaPC = OK;
 		}
+		return 1;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'C'){	
@@ -111,6 +113,7 @@ void trata_dados(){
 		if (respostaPC == PC){
 			respostaPC = OK;
 		}
+		return 1;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'T'){
@@ -118,29 +121,37 @@ void trata_dados(){
 		if (respostaPC == PT){
 			respostaPC = OK;
 		}
+		return 1;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'S'){
 		//Confirma envio do nome de senador
 		if (respostaPC == PS){
+			escreve_mensagem(fifo_recepcao);
+			copia_string(pacote, fifo_recepcao);
 			respostaPC = OK;
 		}
+		return 1;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'G'){
 		//Confirma envio do nome de governador
 		if (respostaPC == PG){
+			copia_string(pacote, fifo_recepcao);
 			respostaPC = OK;
 		}
+		return 1;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'P'){
 		//Confirma envio do nome de presidente
 		if (respostaPC == PP){
+			copia_string(pacote, fifo_recepcao);
 			respostaPC = OK;
 		}
+		return 1;
 	}
-
+	return 0;
 }
 
 void solicita_senador(char* codigo){
@@ -151,6 +162,7 @@ void solicita_senador(char* codigo){
 	mensagem[2] = 2;
 	mensagem[3] = codigo[0];
 	mensagem[4] = codigo[1];
+	mensagem[5] = '\0';
 	respostaPC = PS;
 	escreve_serial(mensagem);
 	
@@ -164,6 +176,7 @@ void solicita_governador(char* codigo){
 	mensagem[2] = 2;
 	mensagem[3] = codigo[0];
 	mensagem[4] = codigo[1];
+	mensagem[5] = '\0';
 	respostaPC = PG;
 	escreve_serial(mensagem);
 }
@@ -176,6 +189,7 @@ void solicita_presidente(char* codigo){
 	mensagem[2] = 2;
 	mensagem[3] = codigo[0];
 	mensagem[4] = codigo[1];
+	mensagem[5] = '\0';
 	respostaPC = PP;
 	escreve_serial(mensagem);
 }
