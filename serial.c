@@ -20,7 +20,11 @@
 #define PT 3
 #define PS 4
 #define PG 5 
-#define PP 6 
+#define PP 6
+
+#define NAO 0
+#define LE_N 1
+#define LE_PARAMETRO 2
 
 char fifo_recepcao[30];
 
@@ -56,115 +60,142 @@ void clear_FIFO(){
 
 void trata_interrupcao_serial() interrupt 4 {	
 	static char pos = 0, l_final = 2, lendo_par = 0;
+	char add;
 	if(RI == 1){
 		RI = 0;
 		fifo_recepcao[pos] = SBUF;
 		pos++;
 		
-		if(pos == l_final || lendo_par){
-			//Aqui existem duas opções: se nao ha parametros a serem lidos, l_final continuara a mesmo
-			//Se ha, l_final mudara, e dai o codigo tem que pular diretamente para ca quando ler o proximo byte
-			if (!lendo_par){
-				l_final += trata_dados();
-				lendo_par = 1;
+		if(pos == l_final){
+			//Aqui existem tres opções: se nao ha parametros a serem lidos, l_final continuara a mesmo
+			//
+			if (lendo_par == NAO){
+				add = trata_dados();
+				
+				//Se trata_dados() mostra que não há mais bytes a serem lidos, limpa a FIFO e volta para 
+				//a posição inicial
+				if (add == 0){
+					clear_FIFO();
+					pos = 0;
+					l_final = 2;
+				}
+				
+				//Se trata_dados() envia o valor -1, isso quer dizer que a serial está esperando o valor 
+				//n que indica o número de bytes a serem lidos
+				else if(add == -1) {
+					lendo_par = LE_N;
+					l_final++;
+				}
+				
+				//Se trata_dados() mostra que há mais bytes a serem lidos, adiciona o número de bytes 
+				else{
+					l_final += add;
+					lendo_par = LE_PARAMETRO;
+				}	
 			}
-			
-			if (pos == l_final){
-				trata_dados();
+			else if (lendo_par == LE_N){
+				add = fifo_recepcao[2];
+				l_final += add;
+				lendo_par = LE_PARAMETRO;
+			}
+			else if (lendo_par == LE_PARAMETRO){
+				le_parametros();
 				clear_FIFO();
 				pos = 0;
-				lendo_par = 0;
+				lendo_par = NAO;
+				l_final = 2;
 			}			
 		}
 	}
 }
+
+void le_parametros(){
+	if(fifo_recepcao[0] == 'P'){
+		switch(fifo_recepcao[1]){
+			case('H'):
+				hora = fifo_recepcao[2];
+				minuto = fifo_recepcao[3];
+				return;
+				
+			case('S'):
+				if (respostaPC == PS){
+					copia_string(pacote, fifo_recepcao);
+					respostaPC = OK;
+				}
+				return;
+			case('G'):
+				if (respostaPC == PG){
+					copia_string(pacote, fifo_recepcao);
+					respostaPC = OK;
+				}
+				return;
+				
+			case('P'):
+				if (respostaPC == PP){
+					copia_string(pacote, fifo_recepcao);
+					respostaPC = OK;
+				}
+				return;
+		}
+}
+
 
 //Trata dados deve ler toda a mensagem mandada pela serial
 //Deve retornar o quanto mais deve ser lido nos casos em que a resposta do aplicativo
 //tem parâmatros junto
 char trata_dados(){
 	
-	//Libera urna
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'L'){
-		OLU = 1; //Ordem de Liberar Urna 
-		escreve_serial("ML");
-		return 0;
-	}
-	
-	//Bloqueia urna
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'B'){
-		OLU = 0; //Ordem de Liberar Urna
-		escreve_serial("MB");
-		return 0;
-	}
-	
-	//Atualiza o horario
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'H'){
+	if(fifo_recepcao[0] == 'P'){
 		
-		minuto = fifo_recepcao[3];
-		hora = fifo_recepcao[2];
-		escreve_serial("MH");
-		return 2;
-		
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'U'){
-		//Envia boletim de urna
-		return 0;
-		
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'E'){
-		//Confirma entrada do eleitor
-		if (respostaPC == PE){
-			respostaPC = OK;
+		switch(fifo_recepcao[1]){
+			case('L'):
+				//Libera urna
+				OLU = 1; //Ordem de Liberar Urna 
+				escreve_serial("ML");
+				return 0;
+			case('B'):
+				//Bloqueia urna
+				OLU = 0; //Ordem de Liberar Urna
+				escreve_serial("MB");
+				return 0;
+			case('H'):
+				//Atualiza o horario
+				escreve_serial("MH");
+				return 2;
+			case('U'):
+				//Envia boletim de urna
+				return 0;
+			case('E'):
+				//Confirma entrada do eleitor
+				if (respostaPC == PE){
+					respostaPC = OK;
+				}
+				return 0;
+			case('C'):
+				//Confirma conclusão do voto
+				if (respostaPC == PC){
+					respostaPC = OK;
+				}
+				return 0;
+			case('T'):
+				//Confirma timeout do eleitor
+				if (respostaPC == PT){
+					respostaPC = OK;
+				}
+				return 0;
+			case('S'):
+				//Confirma envio do nome de senador
+				return -1;
+			case('G'):
+				//Confirma envio do nome de governador
+				return -1;
+			case('P'):
+				//Confirma envio do nome de presidente
+				return -1;
+			default:
+				return 0;
+				
 		}
-		return 0;
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'C'){	
-		//Confirma conclusão do voto
-		if (respostaPC == PC){
-			respostaPC = OK;
-		}
-		return 0;
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'T'){
-		//Confirma timeout do eleitor
-		if (respostaPC == PT){
-			respostaPC = OK;
-		}
-		return 0;
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'S' && fifo_recepcao[2] != '\0'){
-		//Confirma envio do nome de senador e guarda a mensagem na fifo
-		char l = fifo_recepcao[2];
-		
-		if (respostaPC == PS){
-			copia_string(pacote, fifo_recepcao);
-			respostaPC = OK;
-		}
-		return 1;
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'G'){
-		//Confirma envio do nome de governador
-		if (respostaPC == PG){
-			copia_string(pacote, fifo_recepcao);
-			respostaPC = OK;
-		}
-		return 1;
-	}
-	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'P'){
-		//Confirma envio do nome de presidente
-		if (respostaPC == PP){
-			copia_string(pacote, fifo_recepcao);
-			respostaPC = OK;
-		}
-		return 1;
 	}
 	return 0;
 }
