@@ -40,6 +40,34 @@ idata char pacote[30];
 
 sbit BUZZER = P3^3;
 
+void sound_buzzer(){
+	
+	short int counter = 0;
+	TR0 = 0;
+	TF0 = 0; //limpa a flag de estouro
+	TMOD &= 0xF0;
+	TMOD |= 0x01; //timer de 16 bits 
+	//22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
+	// 1000 us -> 1844 ciclos - 65536 - 1844 ciclos = 63692 -> 0xF8CC - valor a ser colocado no registrador
+	TH0 = 0xF8;
+	TL0 = 0xCC;
+	TR0 = 1; //liga o timer
+	BUZZER = 0;
+	while(counter < 500){
+		counter ++;
+		while(TF0 == 0);
+		TH0 = 0xF8;
+		TL0 = 0xCC;
+		TF0 = 0;
+		BUZZER = !BUZZER;
+		counter ++;
+		
+	}
+	
+	
+	
+}
+
 void clear_pacote(){
 	
 	char i;
