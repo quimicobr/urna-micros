@@ -55,34 +55,47 @@ void clear_FIFO(){
 
 
 void trata_interrupcao_serial() interrupt 4 {	
-	static char is = 0;
+	static char pos = 0, l_final = 2, lendo_par = 0;
 	if(RI == 1){
 		RI = 0;
-		fifo_recepcao[is] = SBUF;
-		is++;
-		if (trata_dados()){
-			clear_FIFO();
-			is = 0;			
+		fifo_recepcao[pos] = SBUF;
+		pos++;
+		
+		if(pos == l_final || lendo_par){
+			//Aqui existem duas opções: se nao ha parametros a serem lidos, l_final continuara a mesmo
+			//Se ha, l_final mudara, e dai o codigo tem que pular diretamente para ca quando ler o proximo byte
+			if (!lendo_par){
+				l_final += trata_dados();
+				lendo_par = 1;
+			}
+			
+			if (pos == l_final){
+				trata_dados();
+				clear_FIFO();
+				pos = 0;
+				lendo_par = 0;
+			}			
 		}
 	}
 }
 
-//No momento, a confirmação é enviada assim que o computador envia o comando
-//O 
+//Trata dados deve ler toda a mensagem mandada pela serial
+//Deve retornar o quanto mais deve ser lido nos casos em que a resposta do aplicativo
+//tem parâmatros junto
 char trata_dados(){
 	
 	//Libera urna
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'L'){
 		OLU = 1; //Ordem de Liberar Urna 
 		escreve_serial("ML");
-		return 1;
+		return 0;
 	}
 	
 	//Bloqueia urna
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'B'){
 		OLU = 0; //Ordem de Liberar Urna
 		escreve_serial("MB");
-		return 1;
+		return 0;
 	}
 	
 	//Atualiza o horario
@@ -91,12 +104,13 @@ char trata_dados(){
 		minuto = fifo_recepcao[3];
 		hora = fifo_recepcao[2];
 		escreve_serial("MH");
-		return 1;
+		return 2;
 		
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'U'){
 		//Envia boletim de urna
+		return 0;
 		
 	}
 	
@@ -105,7 +119,7 @@ char trata_dados(){
 		if (respostaPC == PE){
 			respostaPC = OK;
 		}
-		return 1;
+		return 0;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'C'){	
@@ -113,7 +127,7 @@ char trata_dados(){
 		if (respostaPC == PC){
 			respostaPC = OK;
 		}
-		return 1;
+		return 0;
 	}
 	
 	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'T'){
@@ -121,13 +135,14 @@ char trata_dados(){
 		if (respostaPC == PT){
 			respostaPC = OK;
 		}
-		return 1;
+		return 0;
 	}
 	
-	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'S'){
-		//Confirma envio do nome de senador
+	if (fifo_recepcao[0] == 'P' && fifo_recepcao[1] == 'S' && fifo_recepcao[2] != '\0'){
+		//Confirma envio do nome de senador e guarda a mensagem na fifo
+		char l = fifo_recepcao[2];
+		
 		if (respostaPC == PS){
-			escreve_mensagem(fifo_recepcao);
 			copia_string(pacote, fifo_recepcao);
 			respostaPC = OK;
 		}
