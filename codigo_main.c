@@ -54,10 +54,10 @@ void configura_serial();
 
 	xdata struct {
 	
-	char nome[20] = "";
-	char partido[5] = "";
-	char nPartido[3] = "";
-	unsigned char nVotos = 0;
+	char nome[20];
+	char partido[5];
+	char nPartido[3];
+	unsigned char nVotos;
 	
 	}presidente[10], governador[10], senador[10];
 
@@ -204,13 +204,13 @@ short code codigo_eleitor [] = {262659, 206603, 244444, 216628,
 		}	
 	}
 }*/
-
+/*
 void envia_boletim(){
 	
-	char i
+	char i;
 	char votos[3];
 	
-	for (i = 0; i<10; i+){
+	for (i = 0; i<10; i++){
 		
 		
 		escreve_serial("Senador: {");
@@ -220,7 +220,8 @@ void envia_boletim(){
 			escreve_serial("(");
 			escreve_serial(senador[i].nome);
 			escreve_serial(",");
-			escreve_serial(number_to_char(votos,senador[i].nVotos));
+			number_to_char(votos,senador[i].nVotos);
+			escreve_serial(votos);
 			escreve_serial(") ");
 			
 		}
@@ -232,7 +233,8 @@ void envia_boletim(){
 			escreve_serial("(");
 			escreve_serial(governador[i].nome);
 			escreve_serial(",");
-			escreve_serial(number_to_char(votos,governador[i].nVotos));
+			number_to_char(votos,governador[i].nVotos);
+			escreve_serial(votos);
 			escreve_serial(") ");
 			
 		}
@@ -244,7 +246,8 @@ void envia_boletim(){
 			escreve_serial("(");
 			escreve_serial(presidente[i].nome);
 			escreve_serial(",");
-			escreve_serial(number_to_char(votos,presidente[i].nVotos));
+			number_to_char(votos,presidente[i].nVotos);
+			escreve_serial(votos);
 			escreve_serial(") ");
 			
 		}
@@ -252,6 +255,30 @@ void envia_boletim(){
 		escreve_serial("}");
 	}
 }
+*//*
+void inicializa_structs(){
+	
+	char i;
+	for(i = 0; i<10; i++){
+		
+		inicializa_string(senador[i].nome, 20);
+		inicializa_string(senador[i].partido, 5);
+		inicializa_string(senador[i].nPartido, 3);
+		senador[i].nVotos = 0;
+		
+		inicializa_string(governador[i].nome, 20);
+		inicializa_string(governador[i].partido, 5);
+		inicializa_string(governador[i].nPartido, 3);
+		governador[i].nVotos = 0;
+		
+		inicializa_string(presidente[i].nome, 20);
+		inicializa_string(presidente[i].partido, 5);
+		inicializa_string(presidente[i].nPartido, 3);
+		presidente[i].nVotos = 0;
+		
+	}
+	
+}*/
 
 void main(){
 	char c;
@@ -262,7 +289,7 @@ void main(){
 	//Inicializa o visor LCD
 	LCD_init();
 
-	
+	//inicializa_structs();
 		//clear_pacote();
 		//solicita_senador("13");
 	

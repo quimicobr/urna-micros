@@ -3,29 +3,28 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: µVision V5.24.2.86
-Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: DELET DELET, UFRGS, LIC=----
+IDE-Version: µVision V5.14.2.1
+Copyright (C) 2015 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: DAELE DAELE, DAELE, LIC=----
  
 Tool Versions:
-Toolchain:       PK51 Prof. Develpers Kit  Version: 9.57.0.0
-Toolchain Path:  C:\C51\Keil_v5\C51\BIN
-C Compiler:      C51.exe V9.57.0.0
-Assembler:       A51.exe V8.2.7.0
-Linker/Locator:  BL51.exe V6.22.2.0
+Toolchain:       PK51 Prof. Develpers Kit  Version: 9.55
+Toolchain Path:  C:\Keil_v5\C51\BIN
+C Compiler:      C51.exe V9.55
+Assembler:       A51.exe V8.02c
+Linker/Locator:  BL51.exe V6.22
 Library Manager: LIB51.exe V4.30.1.0
 Hex Converter:   OH51.exe V2.7.0.0
-CPU DLL:         S8051.DLL V3.113.0.0
-Dialog DLL:      DP51.DLL V2.64.0.0 
+CPU DLL:         S8051.DLL V3.101.0.0
+Dialog DLL:      DP51.DLL V2.62.0.1 
 <h2>Project:</h2>
-C:\Users\202\Downloads\urna-micros-davi-1\urna-micros-davi-1\projeto_micros_gd.uvproj
+C:\Users\ALUNO\Documents\urna-micros-davi-1\projeto_micros_gd.uvproj
 Project File Date:  05/23/2018
 
 <h2>Output:</h2>
 Rebuild target 'Target 1'
 assembling STARTUP.A51...
 compiling codigo_main.c...
-codigo_main.c(213): warning C206: 'configura_relogio': missing function-prototype
 compiling lcd.c...
 compiling teclado.c...
 compiling serial.c...
@@ -49,10 +48,17 @@ linking...
     SEGMENT: ?PR?_SOLICITA_PRESIDENTE?SERIAL
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
     SEGMENT: ?PR?_COMPARA_STRING?MYSTRING
-Program Size: data=122.0 xdata=870 code=1774
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_NUMBER_TO_CHAR?MYSTRING
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_CLEAR_STRING?MYSTRING
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?_INICIALIZA_STRING?MYSTRING
+*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
+    SEGMENT: ?PR?SOUND_BUZZER_VOTO?BUZZER
+Program Size: data=128.0 xdata=870 code=2037
 creating hex file from ".\Objects\projeto_micros_gd"...
-".\Objects\projeto_micros_gd" - 0 Error(s), 9 Warning(s).
-Build Time Elapsed:  00:00:01
+".\Objects\projeto_micros_gd" - 0 Error(s), 12 Warning(s).
 </pre>
 </body>
 </html>

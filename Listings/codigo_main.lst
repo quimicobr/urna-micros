@@ -1,10 +1,10 @@
-C51 COMPILER V9.57.0.0   CODIGO_MAIN                                                       05/23/2018 11:44:45 PAGE 1   
+C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 1   
 
 
-C51 COMPILER V9.57.0.0, COMPILATION OF MODULE CODIGO_MAIN
+C51 COMPILER V9.55, COMPILATION OF MODULE CODIGO_MAIN
 OBJECT MODULE PLACED IN .\Objects\codigo_main.obj
-COMPILER INVOKED BY: C:\C51\Keil_v5\C51\BIN\C51.EXE codigo_main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Li
-                    -stings\codigo_main.lst) TABS(2) OBJECT(.\Objects\codigo_main.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE codigo_main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+                    -gs\codigo_main.lst) TABS(2) OBJECT(.\Objects\codigo_main.obj)
 
 line level    source
 
@@ -12,7 +12,7 @@ line level    source
    2          #include<lcd.h>
    3          #include<teclado.h>
    4          #include<serial.h>
-   5          //#include<relogio.h>
+   5          #include<relogio.h>
    6          #include<myString.h>
    7          #include<buzzer.h>
    8          
@@ -58,216 +58,279 @@ line level    source
   48   2          pacote[i] = '\0';
   49   2        }
   50   1          
-  51   1        
-  52   1      }
-  53          
-  54          void configura_serial();
-C51 COMPILER V9.57.0.0   CODIGO_MAIN                                                       05/23/2018 11:44:45 PAGE 2   
+  51   1      }
+  52          
+  53          void configura_serial();
+  54          
+C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 2   
 
-  55          
-  56            xdata struct {
-  57            
-  58            char nome[20];
-  59            char partido[5];
-  60            char nPartido[3];
-  61            unsigned char nVotos;
-  62            
-  63            }presidente[10], governador[10], senador[10];
-  64          
-  65          short code codigo_eleitor [] = {262659, 206603, 244444, 216628, 
-  66                262645,
-  67                208221,
-  68                262668,
-  69                230357,
-  70                262672,
-  71                143293,
-  72                245562,
-  73                262686,
-  74                264768,
-  75                161948,
-  76                262649,
-  77                231423,
-  78                230340,
-  79                195149,
-  80                231023,
-  81                231035,
-  82                221689,
-  83                220149,
-  84                264770,
-  85                216625,
-  86                262670,
-  87                180669,
-  88                262688,
-  89                186103,
-  90                230230,
-  91                219839,
-  92                243704,
-  93                243716,
-  94                275628,
-  95                262543,
-  96                275632,
-  97                275631,
-  98                275629,
-  99                221433,
- 100                262542,
- 101                275633,
- 102                218776,
- 103                216149,
- 104                262539,
- 105                207273,
- 106                259797 };
+  55            xdata struct {
+  56            
+  57            char nome[20];
+  58            char partido[5];
+  59            char nPartido[3];
+  60            unsigned char nVotos;
+  61            
+  62            }presidente[10], governador[10], senador[10];
+  63          
+  64          short code codigo_eleitor [] = {262659, 206603, 244444, 216628, 
+  65                262645,
+  66                208221,
+  67                262668,
+  68                230357,
+  69                262672,
+  70                143293,
+  71                245562,
+  72                262686,
+  73                264768,
+  74                161948,
+  75                262649,
+  76                231423,
+  77                230340,
+  78                195149,
+  79                231023,
+  80                231035,
+  81                221689,
+  82                220149,
+  83                264770,
+  84                216625,
+  85                262670,
+  86                180669,
+  87                262688,
+  88                186103,
+  89                230230,
+  90                219839,
+  91                243704,
+  92                243716,
+  93                275628,
+  94                262543,
+  95                275632,
+  96                275631,
+  97                275629,
+  98                221433,
+  99                262542,
+ 100                275633,
+ 101                218776,
+ 102                216149,
+ 103                262539,
+ 104                207273,
+ 105                259797 };
+ 106            
  107            
- 108            
- 109          //Como vai funcionar: a urna tem que estar em modo standby para receber algo do teclado ou da serial.
- 110          //Se ela está em modo bloqueada, ela não pode estar disponível para receber nada do teclado.
- 111          //Se ela está em modo
+ 108          //Como vai funcionar: a urna tem que estar em modo standby para receber algo do teclado ou da serial.
+ 109          //Se ela está em modo bloqueada, ela não pode estar disponível para receber nada do teclado.
+ 110          //Se ela está em modo
+ 111          
  112          
- 113          
- 114          //Inicialização: configurar serial, relógio, LCD e pedir os dados de todos os candidatos possíveis 
- 115          
- 116          /*void varredura_candidatos(){
-C51 COMPILER V9.57.0.0   CODIGO_MAIN                                                       05/23/2018 11:44:45 PAGE 3   
+ 113          //Inicialização: configurar serial, relógio, LCD e pedir os dados de todos os candidatos possíveis 
+ 114          
+ 115          /*void varredura_candidatos(){
+ 116            
+C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 3   
 
- 117            
- 118            char d0, d1;
- 119            char d[3];
- 120            char comprimento, i, inicio_par;
- 121            char nome[20];
- 122            char partido[5];
- 123            char pos_sen = 0, pos_gov = 0, pos_pres = 0;
- 124          
- 125            for (d0 = '0'; d0 <= '1'; d0++){
- 126              
- 127              d[0] = d0;
- 128              for (d1 = '0'; d1 <= '9'; d1++){
- 129                
- 130                d[1] = d1;
- 131                d[2] = '\0';
- 132                // ---------------------------
- 133                solicita_senador(d);
- 134                while (respostaPC != OK);
- 135                //Pega o dado do senador e ve se nao é nulo
- 136                //Se não for, armazena no vetor de struct
- 137                
- 138                comprimento = pacote[2];
- 139                
- 140                for (i = 0; pacote[i+3] != ' ' ; i++){
- 141                  nome[i] = pacote[i+3];
- 142                }
- 143                inicio_par = i + 1; 
- 144                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
- 145                  partido[i] = pacote[i+inicio_par];
- 146                }
+ 117            char d0, d1;
+ 118            char d[3];
+ 119            char comprimento, i, inicio_par;
+ 120            char nome[20];
+ 121            char partido[5];
+ 122            char pos_sen = 0, pos_gov = 0, pos_pres = 0;
+ 123          
+ 124            for (d0 = '0'; d0 <= '1'; d0++){
+ 125              
+ 126              d[0] = d0;
+ 127              for (d1 = '0'; d1 <= '9'; d1++){
+ 128                
+ 129                d[1] = d1;
+ 130                d[2] = '\0';
+ 131                // ---------------------------
+ 132                solicita_senador(d);
+ 133                while (respostaPC != OK);
+ 134                //Pega o dado do senador e ve se nao é nulo
+ 135                //Se não for, armazena no vetor de struct
+ 136                
+ 137                comprimento = pacote[2];
+ 138                
+ 139                for (i = 0; pacote[i+3] != ' ' ; i++){
+ 140                  nome[i] = pacote[i+3];
+ 141                }
+ 142                inicio_par = i + 1; 
+ 143                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+ 144                  partido[i] = pacote[i+inicio_par];
+ 145                }
+ 146                
  147                
- 148                
- 149                if(!compara_string(nome,"NULO")){
- 150                  copia_string(senador[pos_sen].nome, nome);
- 151                  copia_string(senador[pos_sen].partido, partido);
- 152                  copia_string(senador[pos_sen].nPartido, d);
- 153                }
- 154                clear_string(pacote);
- 155                clear_string(nome);
- 156                clear_string(partido);
- 157                // ---------------------------
- 158                solicita_governador(d);
- 159                
- 160                while (respostaPC != OK);
- 161                //Pega o dado do senador e ve se nao é nulo
- 162                //Se não for, armazena no vetor de struct
- 163                comprimento = pacote[2];
- 164                
- 165                for (i = 0; pacote[i+3] != ' '; i++){
- 166                  nome[i] = pacote[i+3];
- 167                }
- 168                inicio_par = i + 1; 
- 169                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
- 170                  partido[i] = pacote[i+inicio_par];
- 171                }
- 172                
- 173                clear_pacote();
- 174                
- 175                if(!compara_string(nome,"NULO")){
- 176                  copia_string(governador[pos_sen].nome, nome);
- 177                  copia_string(governador[pos_sen].partido, partido);
- 178                  copia_string(governador[pos_sen].nPartido, d);
-C51 COMPILER V9.57.0.0   CODIGO_MAIN                                                       05/23/2018 11:44:45 PAGE 4   
+ 148                if(!compara_string(nome,"NULO")){
+ 149                  copia_string(senador[pos_sen].nome, nome);
+ 150                  copia_string(senador[pos_sen].partido, partido);
+ 151                  copia_string(senador[pos_sen].nPartido, d);
+ 152                }
+ 153                clear_string(pacote);
+ 154                clear_string(nome);
+ 155                clear_string(partido);
+ 156                // ---------------------------
+ 157                solicita_governador(d);
+ 158                
+ 159                while (respostaPC != OK);
+ 160                //Pega o dado do senador e ve se nao é nulo
+ 161                //Se não for, armazena no vetor de struct
+ 162                comprimento = pacote[2];
+ 163                
+ 164                for (i = 0; pacote[i+3] != ' '; i++){
+ 165                  nome[i] = pacote[i+3];
+ 166                }
+ 167                inicio_par = i + 1; 
+ 168                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+ 169                  partido[i] = pacote[i+inicio_par];
+ 170                }
+ 171                
+ 172                clear_pacote();
+ 173                
+ 174                if(!compara_string(nome,"NULO")){
+ 175                  copia_string(governador[pos_sen].nome, nome);
+ 176                  copia_string(governador[pos_sen].partido, partido);
+ 177                  copia_string(governador[pos_sen].nPartido, d);
+ 178                }
+C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 4   
 
- 179                }
- 180                
- 181                // ---------------------------
- 182                solicita_presidente(d);
- 183                
- 184                while (respostaPC != OK);
- 185                //Pega o dado do senador e ve se nao é nulo
- 186                //Se não for, armazena no vetor de struct
- 187                comprimento = pacote[2];
- 188                
- 189                for (i = 0; pacote[i+3] != ' '; i++){
- 190                  nome[i] = pacote[i+3];
- 191                }
- 192                inicio_par = i + 1; 
- 193                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
- 194                  partido[i] = pacote[i+inicio_par];
- 195                }
- 196                
- 197                clear_pacote();
- 198                
- 199                if(!compara_string(nome,"NULO")){
- 200                  copia_string(presidente[pos_sen].nome, nome);
- 201                  copia_string(presidente[pos_sen].partido, partido);
- 202                  copia_string(presidente[pos_sen].nPartido, d);
- 203                }
- 204          
- 205              } 
- 206            }
- 207          }*/
- 208          
- 209          void main(){
- 210   1        char c;
- 211   1        
- 212   1        configura_serial();
- 213   1        configura_relogio();
-*** WARNING C206 IN LINE 213 OF codigo_main.c: 'configura_relogio': missing function-prototype
- 214   1        
- 215   1        //Inicializa o visor LCD
- 216   1        LCD_init();
- 217   1      
- 218   1      
- 219   1        
- 220   1        
- 221   1      
- 222   1        //  escreve_serial("Inicializa");
- 223   1        
- 224   1          //clear_pacote();
- 225   1          //solicita_senador("13");
- 226   1        
- 227   1        while(1){
- 228   2          
- 229   2          c = le_teclado();
- 230   2          if (c != 0){
- 231   3            escreve_LCD(c);
- 232   3            sound_buzzer_teclado();
- 233   3            
- 234   3          }
- 235   2          
- 236   2        
- 237   2          
- 238   2        } 
- 239   1      }
-C51 COMPILER V9.57.0.0   CODIGO_MAIN                                                       05/23/2018 11:44:45 PAGE 5   
+ 179                
+ 180                // ---------------------------
+ 181                solicita_presidente(d);
+ 182                
+ 183                while (respostaPC != OK);
+ 184                //Pega o dado do senador e ve se nao é nulo
+ 185                //Se não for, armazena no vetor de struct
+ 186                comprimento = pacote[2];
+ 187                
+ 188                for (i = 0; pacote[i+3] != ' '; i++){
+ 189                  nome[i] = pacote[i+3];
+ 190                }
+ 191                inicio_par = i + 1; 
+ 192                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+ 193                  partido[i] = pacote[i+inicio_par];
+ 194                }
+ 195                
+ 196                clear_pacote();
+ 197                
+ 198                if(!compara_string(nome,"NULO")){
+ 199                  copia_string(presidente[pos_sen].nome, nome);
+ 200                  copia_string(presidente[pos_sen].partido, partido);
+ 201                  copia_string(presidente[pos_sen].nPartido, d);
+ 202                }
+ 203          
+ 204              } 
+ 205            }
+ 206          }*/
+ 207          /*
+ 208          void envia_boletim(){
+ 209            
+ 210            char i;
+ 211            char votos[3];
+ 212            
+ 213            for (i = 0; i<10; i++){
+ 214              
+ 215              
+ 216              escreve_serial("Senador: {");
+ 217              
+ 218              if(compara_string(senador[i].nome, "")){
+ 219                
+ 220                escreve_serial("(");
+ 221                escreve_serial(senador[i].nome);
+ 222                escreve_serial(",");
+ 223                number_to_char(votos,senador[i].nVotos);
+ 224                escreve_serial(votos);
+ 225                escreve_serial(") ");
+ 226                
+ 227              }
+ 228              
+ 229              escreve_serial("} Governador: {");
+ 230              
+ 231              if(compara_string(governador[i].nome, "")){
+ 232                
+ 233                escreve_serial("(");
+ 234                escreve_serial(governador[i].nome);
+ 235                escreve_serial(",");
+ 236                number_to_char(votos,governador[i].nVotos);
+ 237                escreve_serial(votos);
+ 238                escreve_serial(") ");
+ 239                
+ 240              }
+C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 5   
 
- 240          
- 241          
- 242          
- 243          
- 244          
- 245          
- 246          
- 247          
+ 241              
+ 242              escreve_serial("} Presidente: {");
+ 243              
+ 244              if(compara_string(presidente[i].nome, "")){
+ 245                
+ 246                escreve_serial("(");
+ 247                escreve_serial(presidente[i].nome);
+ 248                escreve_serial(",");
+ 249                number_to_char(votos,presidente[i].nVotos);
+ 250                escreve_serial(votos);
+ 251                escreve_serial(") ");
+ 252                
+ 253              }
+ 254              
+ 255              escreve_serial("}");
+ 256            }
+ 257          }
+ 258          *//*
+ 259          void inicializa_structs(){
+ 260            
+ 261            char i;
+ 262            for(i = 0; i<10; i++){
+ 263              
+ 264              inicializa_string(senador[i].nome, 20);
+ 265              inicializa_string(senador[i].partido, 5);
+ 266              inicializa_string(senador[i].nPartido, 3);
+ 267              senador[i].nVotos = 0;
+ 268              
+ 269              inicializa_string(governador[i].nome, 20);
+ 270              inicializa_string(governador[i].partido, 5);
+ 271              inicializa_string(governador[i].nPartido, 3);
+ 272              governador[i].nVotos = 0;
+ 273              
+ 274              inicializa_string(presidente[i].nome, 20);
+ 275              inicializa_string(presidente[i].partido, 5);
+ 276              inicializa_string(presidente[i].nPartido, 3);
+ 277              presidente[i].nVotos = 0;
+ 278              
+ 279            }
+ 280            
+ 281          }*/
+ 282          
+ 283          void main(){
+ 284   1        char c;
+ 285   1        
+ 286   1        configura_serial();
+ 287   1        configura_relogio();
+ 288   1        
+ 289   1        //Inicializa o visor LCD
+ 290   1        LCD_init();
+ 291   1      
+ 292   1        //inicializa_structs();
+ 293   1          //clear_pacote();
+ 294   1          //solicita_senador("13");
+ 295   1        
+ 296   1        while(1){
+ 297   2          
+ 298   2          c = le_teclado();
+ 299   2          
+ 300   2        } 
+ 301   1      }
+ 302          
+C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 6   
+
+ 303          
+ 304          
+ 305          
+ 306          
+ 307          
+ 308          
+ 309          
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     53    ----
+   CODE SIZE        =     43    ----
    CONSTANT SIZE    =     90    ----
    XDATA SIZE       =    870    ----
    PDATA SIZE       =   ----    ----
@@ -277,4 +340,4 @@ MODULE INFORMATION:   STATIC OVERLAYABLE
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

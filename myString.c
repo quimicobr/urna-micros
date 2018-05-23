@@ -45,17 +45,26 @@ void number_to_char(char* out, char in){
 		out[1] = in +48;
 	}
 	else{
-		out[0] = mod(in, 10) + 48;
-		out[1] = in - mod(in, 10)*10 + 48;
+		out[0] = in%10 + 48;
+		out[1] = in - (in%10)*10 + 48;
 	}
 	
 }
 
-/*void clear_string(char* string){
+void clear_string(char* string){
 	
 	char i;
 	for (i = 0; string[i] != '\0'; i++){
 		string[i] = '\0';
 	}
 	
-}*/
+}
+
+void inicializa_string(char* string, char len){
+	
+	char i;
+	for (i = 0; i<len; i++){
+		string[i] = '\0';
+	}
+	
+}

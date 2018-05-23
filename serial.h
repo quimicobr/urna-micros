@@ -13,3 +13,4 @@ char trata_dados();
 void solicita_senador(char* codigo);
 void solicita_governador(char* codigo);
 void solicita_presidente(char* codigo);
+

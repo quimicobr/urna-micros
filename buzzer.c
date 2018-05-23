@@ -23,6 +23,7 @@ void sound_buzzer_teclado(){
 		TF0 = 0;
 		BUZZER = !BUZZER;	
 	}
+}
 	
 void sound_buzzer_voto(){
 	

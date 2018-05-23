@@ -1,10 +1,10 @@
-C51 COMPILER V9.57.0.0   SERIAL                                                            05/23/2018 11:44:45 PAGE 1   
+C51 COMPILER V9.55   SERIAL                                                                05/23/2018 13:57:11 PAGE 1   
 
 
-C51 COMPILER V9.57.0.0, COMPILATION OF MODULE SERIAL
+C51 COMPILER V9.55, COMPILATION OF MODULE SERIAL
 OBJECT MODULE PLACED IN .\Objects\serial.obj
-COMPILER INVOKED BY: C:\C51\Keil_v5\C51\BIN\C51.EXE serial.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listing
-                    -s\serial.lst) TABS(2) OBJECT(.\Objects\serial.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE serial.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\se
+                    -rial.lst) TABS(2) OBJECT(.\Objects\serial.obj)
 
 line level    source
 
@@ -62,7 +62,7 @@ line level    source
   52          
   53          void clear_FIFO(){
   54   1        char i;
-C51 COMPILER V9.57.0.0   SERIAL                                                            05/23/2018 11:44:45 PAGE 2   
+C51 COMPILER V9.55   SERIAL                                                                05/23/2018 13:57:11 PAGE 2   
 
   55   1        for (i = 0; fifo_recepcao[i] != '\0' && i<30; i++) fifo_recepcao[i] = '\0';
   56   1        
@@ -126,7 +126,7 @@ line level    source
  114   2          switch(fifo_recepcao[1]){
  115   3            case('H'):
  116   3              hora = fifo_recepcao[2];
-C51 COMPILER V9.57.0.0   SERIAL                                                            05/23/2018 11:44:45 PAGE 3   
+C51 COMPILER V9.55   SERIAL                                                                05/23/2018 13:57:11 PAGE 3   
 
  117   3              minuto = fifo_recepcao[3];
  118   3              return;
@@ -190,7 +190,7 @@ line level    source
  176   3              if (respostaPC == PC){
  177   4                respostaPC = OK;
  178   4              }
-C51 COMPILER V9.57.0.0   SERIAL                                                            05/23/2018 11:44:45 PAGE 4   
+C51 COMPILER V9.55   SERIAL                                                                05/23/2018 13:57:11 PAGE 4   
 
  179   3              return 0;
  180   3            case('T'):
@@ -254,7 +254,7 @@ line level    source
  238   1        escreve_serial(mensagem);
  239   1      }
  240          
-C51 COMPILER V9.57.0.0   SERIAL                                                            05/23/2018 11:44:45 PAGE 5   
+C51 COMPILER V9.55   SERIAL                                                                05/23/2018 13:57:11 PAGE 5   
 
  241          
  242          

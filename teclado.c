@@ -21,7 +21,7 @@ char le_teclado(){
 		
 		if(tecla_atual!= tecla){
 			tecla = tecla_atual;
-			escreve_LCD(c);
+			escreve_LCD(tecla);
 			sound_buzzer_teclado();
 			return tecla;
 		}
