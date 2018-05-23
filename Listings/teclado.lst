@@ -1,137 +1,136 @@
-C51 COMPILER V9.56.0.0   TECLADO                                                           05/21/2018 16:25:11 PAGE 1   
+C51 COMPILER V9.57.0.0   TECLADO                                                           05/23/2018 11:44:45 PAGE 1   
 
 
-C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TECLADO
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE TECLADO
 OBJECT MODULE PLACED IN .\Objects\teclado.obj
-COMPILER INVOKED BY: C:\Keil_v5_C51\C51\BIN\C51.EXE teclado.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
+COMPILER INVOKED BY: C:\C51\Keil_v5\C51\BIN\C51.EXE teclado.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
                     -gs\teclado.lst) TABS(2) OBJECT(.\Objects\teclado.obj)
 
 line level    source
 
-   1          /*#include<reg52.h>
+   1          #include<reg52.h>
    2          #include<teclado.h>
    3          
    4          
    5          sbit C1 = P0^0; //coluna 1
    6          sbit C2 = P0^1;
    7          sbit C3 = P0^2;
-   8          sbit L1 = P0^4;   //linha 1
-   9          sbit L2 = P0^5;
-  10          sbit L3 = P0^6;
-  11          sbit L4 = P0^7;
+   8          //sbit L1 = P0^4;   //linha 1
+   9          //sbit L2 = P0^5;
+  10          //sbit L3 = P0^6;
+  11          //sbit L4 = P0^7;
   12          
   13          
   14          char le_teclado(){
-  15          static char tecla;
-  16          char tecla_atual;
-  17            tecla_atual = varredura();
-  18            if(tecla_atual!= tecla){
-  19            tecla = tecla_atual;
-  20            return tecla;
-  21            }
-  22          return '\0';
-  23          }
+  15   1      static char tecla;
+  16   1      char tecla_atual;
+  17   1        tecla_atual = varredura();
+  18   1        if(tecla_atual!= tecla){
+  19   2        tecla = tecla_atual;
+  20   2        return tecla;
+  21   2        }
+  22   1      return '\0';
+  23   1      }
   24          
   25          void atraso_1m(){
-  26            
-  27            TR0 = 0;
-  28            TF0 = 0; //limpa a flag de estouro  
-  29            TMOD &= 0xF0;
-  30            TMOD |= 0x02;
-  31            //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
-  32            // 1 ms -> 1844 ciclos -> 65536 - 1844 ciclos = 63692 -> valor a ser colocado no registrador
-  33            TH0 = 0xF8; 
-  34            TL0 = 0xCC;
-  35            TR0 = 1; //liga o timer
-  36            while(TF0 == 0);
-  37          
-  38          }
+  26   1        
+  27   1        TR0 = 0;
+  28   1        TF0 = 0; //limpa a flag de estouro  
+  29   1        TMOD &= 0xF0;
+  30   1        TMOD |= 0x02;
+  31   1        //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
+  32   1        // 1 ms -> 1844 ciclos -> 65536 - 1844 ciclos = 63692 -> valor a ser colocado no registrador
+  33   1        TH0 = 0xF8; 
+  34   1        TL0 = 0xCC;
+  35   1        TR0 = 1; //liga o timer
+  36   1        while(TF0 == 0);
+  37   1      
+  38   1      }
   39          
   40          char debouncing(char tecla){
-  41            
-  42            char i = 0;
-  43            for (i = 0; i<=8; i++){
-  44                
-  45              if (P0 != tecla){
-  46                return 0;
-  47              }
-  48              atraso_1m();
-  49              
-  50            }
-  51            return 1;
-  52          
-  53          }
+  41   1        
+  42   1        char i = 0;
+  43   1        for (i = 0; i<=8; i++){
+  44   2            
+  45   2          if (P0 != tecla){
+  46   3            return 0;
+  47   3          }
+  48   2          atraso_1m();
+  49   2          
+  50   2        }
+  51   1        return 1;
+  52   1      
+  53   1      }
   54          
-C51 COMPILER V9.56.0.0   TECLADO                                                           05/21/2018 16:25:11 PAGE 2   
+C51 COMPILER V9.57.0.0   TECLADO                                                           05/23/2018 11:44:45 PAGE 2   
 
   55          char varredura(){
-  56            C1 = 0;
-  57            C2 = 1;
-  58            C3 = 1;
-  59            switch(P0){
-  60              case 0x7E:    //L1
-  61                if(debouncing(0x7E))
-  62                  return '1';
-  63              case 0xBE:    //L2
-  64                if(debouncing(0xBE))
-  65                  return '4';
-  66              case 0xDE:    //L3
-  67                if(debouncing(0xDE))
-  68                  return '7';
-  69              case 0xEE:    //L4
-  70                if(debouncing(0xEE))
-  71                  return '*';
-  72            }
-  73            
-  74            C1 = 1;
-  75            C2 = 0;
-  76            C3 = 1;
-  77            switch(P0){
-  78              case 0x7D:    //L1
-  79                if(debouncing(0x7D))
-  80                  return '2';
-  81              case 0xBD:    //L2
-  82                if(debouncing(0xBD))
-  83                  return '5';
-  84              case 0xDD:    //L3
-  85                if(debouncing(0xDD))
-  86                  return '8';
-  87              case 0xED:    //L4
-  88                if(debouncing(0xED))
-  89                  return '0';
-  90            }
-  91            
-  92            C1 = 1;
-  93            C2 = 1;
-  94            C3 = 0;
-  95            switch(P0){
-  96              case 0x7B:    //L1
-  97                if(debouncing(0x7B))
-  98                  return '3';
-  99              case 0xBB:    //L2
- 100                if(debouncing(0xBB))
- 101                  return '6';
- 102              case 0xDB:    //L3
- 103                if(debouncing(0xDB))
- 104                  return '9';
- 105              case 0xEB:    //L4
- 106                if(debouncing(0xEB))
- 107                  return '#';
- 108              }
- 109            
- 110            return '\0';
- 111          }
- 112          */
+  56   1        C1 = 0;
+  57   1        C2 = 1;
+  58   1        C3 = 1;
+  59   1        switch(P0){
+  60   2          case 0x7E:    //L1
+  61   2            if(debouncing(0x7E))
+  62   2              return '1';
+  63   2          case 0xBE:    //L2
+  64   2            if(debouncing(0xBE))
+  65   2              return '4';
+  66   2          case 0xDE:    //L3
+  67   2            if(debouncing(0xDE))
+  68   2              return '7';
+  69   2          case 0xEE:    //L4
+  70   2            if(debouncing(0xEE))
+  71   2              return '*';
+  72   2        }
+  73   1        
+  74   1        C1 = 1;
+  75   1        C2 = 0;
+  76   1        C3 = 1;
+  77   1        switch(P0){
+  78   2          case 0x7D:    //L1
+  79   2            if(debouncing(0x7D))
+  80   2              return '2';
+  81   2          case 0xBD:    //L2
+  82   2            if(debouncing(0xBD))
+  83   2              return '5';
+  84   2          case 0xDD:    //L3
+  85   2            if(debouncing(0xDD))
+  86   2              return '8';
+  87   2          case 0xED:    //L4
+  88   2            if(debouncing(0xED))
+  89   2              return '0';
+  90   2        }
+  91   1        
+  92   1        C1 = 1;
+  93   1        C2 = 1;
+  94   1        C3 = 0;
+  95   1        switch(P0){
+  96   2          case 0x7B:    //L1
+  97   2            if(debouncing(0x7B))
+  98   2              return '3';
+  99   2          case 0xBB:    //L2
+ 100   2            if(debouncing(0xBB))
+ 101   2              return '6';
+ 102   2          case 0xDB:    //L3
+ 103   2            if(debouncing(0xDB))
+ 104   2              return '9';
+ 105   2          case 0xEB:    //L4
+ 106   2            if(debouncing(0xEB))
+ 107   2              return '#';
+ 108   2          }
+ 109   1        
+ 110   1        return '\0';
+ 111   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =   ----    ----
-C51 COMPILER V9.56.0.0   TECLADO                                                           05/21/2018 16:25:11 PAGE 3   
-
+   CODE SIZE        =    266    ----
    CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.57.0.0   TECLADO                                                           05/23/2018 11:44:45 PAGE 3   
+
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----    ----
+   DATA SIZE        =      1    ----
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.

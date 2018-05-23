@@ -1,14 +1,14 @@
-/*#include<reg52.h>
+#include<reg52.h>
 #include<teclado.h>
 
 
 sbit C1 = P0^0;	//coluna 1
 sbit C2 = P0^1;
 sbit C3 = P0^2;
-sbit L1 = P0^4; 	//linha 1
-sbit L2 = P0^5;
-sbit L3 = P0^6;
-sbit L4 = P0^7;
+//sbit L1 = P0^4; 	//linha 1
+//sbit L2 = P0^5;
+//sbit L3 = P0^6;
+//sbit L4 = P0^7;
 
 
 char le_teclado(){
@@ -109,4 +109,3 @@ char varredura(){
 	
 	return '\0';
 }
-*/

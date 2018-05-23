@@ -137,8 +137,8 @@ void le_parametros(){
 				}
 				return;
 		}
+	}
 }
-
 
 //Trata dados deve ler toda a mensagem mandada pela serial
 //Deve retornar o quanto mais deve ser lido nos casos em que a resposta do aplicativo
@@ -201,7 +201,6 @@ char trata_dados(){
 }
 
 void solicita_senador(char* codigo){
-	
 	char mensagem[6];
 	mensagem[0] = 'M';
 	mensagem[1] = 'S';
@@ -211,7 +210,6 @@ void solicita_senador(char* codigo){
 	mensagem[5] = '\0';
 	respostaPC = PS;
 	escreve_serial(mensagem);
-	
 }
 
 void solicita_governador(char* codigo){

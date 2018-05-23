@@ -1,9 +1,9 @@
-C51 COMPILER V9.56.0.0   MYSTRING                                                          05/21/2018 16:25:11 PAGE 1   
+C51 COMPILER V9.57.0.0   MYSTRING                                                          05/23/2018 11:44:45 PAGE 1   
 
 
-C51 COMPILER V9.56.0.0, COMPILATION OF MODULE MYSTRING
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE MYSTRING
 OBJECT MODULE PLACED IN .\Objects\myString.obj
-COMPILER INVOKED BY: C:\Keil_v5_C51\C51\BIN\C51.EXE myString.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
+COMPILER INVOKED BY: C:\C51\Keil_v5\C51\BIN\C51.EXE myString.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listi
                     -ngs\myString.lst) TABS(2) OBJECT(.\Objects\myString.obj)
 
 line level    source
@@ -25,45 +25,49 @@ line level    source
   15                
   16          char compara_string(char* string1,char* string2){
   17   1        
-  18   1        char i, out = 1;
-  19   1        char lim;
-  20   1        lim = maior(len_string(string1), len_string(string2));
-  21   1        
-  22   1        for (i = 0; i< lim; i++){
-  23   2          if(string1[i] != string2[i]){
-  24   3            return 0;
-  25   3          }
-  26   2        }
-  27   1        return 1;
-  28   1      } 
-  29          
-  30          void copia_string(char* alvo, char* valor){
-  31   1        
-  32   1        char i;
-  33   1        for (i = 0; valor[i] != '\0'; i++) alvo[i] = valor[i];
-  34   1      
-  35   1      }
-  36          
-  37          void clear_string(char* string){
-  38   1        
-  39   1        char i;
-  40   1        for (i = 0; string[i] != '\0'; i++){
-  41   2          string[i] = '\0';
-  42   2        }
-  43   1        
-  44   1      }
+  18   1        //strings iguais retorna 1
+  19   1        //strings diferentes retorna 0
+  20   1        
+  21   1        char i, out = 1;
+  22   1        char lim;
+  23   1        lim = maior(len_string(string1), len_string(string2));
+  24   1        
+  25   1        for (i = 0; i< lim; i++){
+  26   2          
+  27   2          if(string1[i] != string2[i]){
+  28   3            return 0;
+  29   3          }
+  30   2        }
+  31   1        return 1;
+  32   1      } 
+  33          
+  34          void copia_string(char* alvo, char* valor){
+  35   1        
+  36   1        char i;
+  37   1        for (i = 0; valor[i] != '\0'; i++) alvo[i] = valor[i];
+  38   1      
+  39   1      }
+  40          
+  41          /*void clear_string(char* string){
+  42            
+  43            char i;
+  44            for (i = 0; string[i] != '\0'; i++){
+  45              string[i] = '\0';
+  46            }
+  47            
+  48          }*/
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    242    ----
+   CODE SIZE        =    198    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
+C51 COMPILER V9.57.0.0   MYSTRING                                                          05/23/2018 11:44:45 PAGE 2   
+
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =   ----      22
+   DATA SIZE        =   ----      19
    IDATA SIZE       =   ----    ----
    BIT SIZE         =   ----    ----
-C51 COMPILER V9.56.0.0   MYSTRING                                                          05/21/2018 16:25:11 PAGE 2   
-
 END OF MODULE INFORMATION.
 
 

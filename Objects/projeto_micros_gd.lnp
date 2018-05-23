@@ -4,6 +4,7 @@
 ".\Objects\teclado.obj",
 ".\Objects\serial.obj",
 ".\Objects\relogio.obj",
-".\Objects\myString.obj" 
+".\Objects\myString.obj",
+".\Objects\buzzer.obj" 
 TO ".\Objects\projeto_micros_gd" 
 PRINT(".\Listings\projeto_micros_gd.m51") RAMSIZE(256) 
