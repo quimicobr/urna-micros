@@ -2,7 +2,7 @@
 #include<lcd.h>
 #include<teclado.h>
 #include<serial.h>
-//#include<relogio.h>
+#include<relogio.h>
 #include<myString.h>
 #include<buzzer.h>
 
@@ -48,17 +48,16 @@ void clear_pacote(){
 		pacote[i] = '\0';
 	}
 		
-	
 }
 
 void configura_serial();
 
 	xdata struct {
 	
-	char nome[20];
-	char partido[5];
-	char nPartido[3];
-	unsigned char nVotos;
+	char nome[20] = "";
+	char partido[5] = "";
+	char nPartido[3] = "";
+	unsigned char nVotos = 0;
 	
 	}presidente[10], governador[10], senador[10];
 
@@ -206,6 +205,54 @@ short code codigo_eleitor [] = {262659, 206603, 244444, 216628,
 	}
 }*/
 
+void envia_boletim(){
+	
+	char i
+	char votos[3];
+	
+	for (i = 0; i<10; i+){
+		
+		
+		escreve_serial("Senador: {");
+		
+		if(compara_string(senador[i].nome, "")){
+			
+			escreve_serial("(");
+			escreve_serial(senador[i].nome);
+			escreve_serial(",");
+			escreve_serial(number_to_char(votos,senador[i].nVotos));
+			escreve_serial(") ");
+			
+		}
+		
+		escreve_serial("} Governador: {");
+		
+		if(compara_string(governador[i].nome, "")){
+			
+			escreve_serial("(");
+			escreve_serial(governador[i].nome);
+			escreve_serial(",");
+			escreve_serial(number_to_char(votos,governador[i].nVotos));
+			escreve_serial(") ");
+			
+		}
+		
+		escreve_serial("} Presidente: {");
+		
+		if(compara_string(presidente[i].nome, "")){
+			
+			escreve_serial("(");
+			escreve_serial(presidente[i].nome);
+			escreve_serial(",");
+			escreve_serial(number_to_char(votos,presidente[i].nVotos));
+			escreve_serial(") ");
+			
+		}
+		
+		escreve_serial("}");
+	}
+}
+
 void main(){
 	char c;
 	
@@ -215,11 +262,6 @@ void main(){
 	//Inicializa o visor LCD
 	LCD_init();
 
-
-	
-	
-
-	//	escreve_serial("Inicializa");
 	
 		//clear_pacote();
 		//solicita_senador("13");
@@ -227,13 +269,6 @@ void main(){
 	while(1){
 		
 		c = le_teclado();
-		if (c != 0){
-			escreve_LCD(c);
-			sound_buzzer_teclado();
-			
-		}
-		
-	
 		
 	}	
 }

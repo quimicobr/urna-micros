@@ -1,5 +1,7 @@
 #include<reg52.h>
 #include<teclado.h>
+#include<buzzer.h>
+#include<lcd.h>
 
 
 sbit C1 = P0^0;	//coluna 1
@@ -12,14 +14,18 @@ sbit C3 = P0^2;
 
 
 char le_teclado(){
-static char tecla;
-char tecla_atual;
-	tecla_atual = varredura();
-	if(tecla_atual!= tecla){
-	tecla = tecla_atual;
-	return tecla;
-	}
-return '\0';
+	
+	static char tecla;
+	char tecla_atual;
+		tecla_atual = varredura();
+		
+		if(tecla_atual!= tecla){
+			tecla = tecla_atual;
+			escreve_LCD(c);
+			sound_buzzer_teclado();
+			return tecla;
+		}
+	return '\0';
 }
 
 void atraso_1m(){

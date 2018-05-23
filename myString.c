@@ -38,6 +38,19 @@ void copia_string(char* alvo, char* valor){
 
 }
 
+void number_to_char(char* out, char in){
+	
+	if (in < 10){
+		out[0] = 0;
+		out[1] = in +48;
+	}
+	else{
+		out[0] = mod(in, 10) + 48;
+		out[1] = in - mod(in, 10)*10 + 48;
+	}
+	
+}
+
 /*void clear_string(char* string){
 	
 	char i;
