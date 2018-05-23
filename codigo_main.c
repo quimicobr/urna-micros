@@ -290,8 +290,8 @@ void main(){
 	LCD_init();
 
 	//inicializa_structs();
-		//clear_pacote();
-		//solicita_senador("13");
+	//clear_pacote();
+	//solicita_senador("13");
 	
 	while(1){
 		
@@ -299,11 +299,3 @@ void main(){
 		
 	}	
 }
-
-
-
-
-
-
-
-
