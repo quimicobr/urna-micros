@@ -1,7 +1,6 @@
 // Nomes:	Davi Nachtigall Lazzarotto   216628
 //				Gustavo Fernandes (230357)			
 
-
 #include<reg52.h>
 #include<lcd.h>
 
@@ -76,7 +75,7 @@ void escreve_mensagem(char* mensagem){
 	
 }
 
-void clear_LCD(){
+void clear_lcd(){
 	escreve_comando(0x01);
 	atraso_clear();
 }

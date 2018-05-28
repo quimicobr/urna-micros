@@ -1,133 +1,139 @@
-C51 COMPILER V9.56.0.0   TECLADO                                                           05/18/2018 19:59:39 PAGE 1   
+C51 COMPILER V9.54   TECLADO                                                               05/25/2018 20:17:32 PAGE 1   
 
 
-C51 COMPILER V9.56.0.0, COMPILATION OF MODULE TECLADO
+C51 COMPILER V9.54, COMPILATION OF MODULE TECLADO
 OBJECT MODULE PLACED IN .\Objects\teclado.obj
-COMPILER INVOKED BY: C:\Keil_v5_C51\C51\BIN\C51.EXE teclado.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
-                    -gs\teclado.lst) TABS(2) OBJECT(.\Objects\teclado.obj)
+COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE teclado.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\t
+                    -eclado.lst) TABS(2) OBJECT(.\Objects\teclado.obj)
 
 line level    source
 
    1          #include<reg52.h>
    2          #include<teclado.h>
-   3          
-   4          
-   5          sbit C1 = P0^0; //coluna 1
-   6          sbit C2 = P0^1;
-   7          sbit C3 = P0^2;
-   8          sbit L1 = P0^4;   //linha 1
-   9          sbit L2 = P0^5;
-  10          sbit L3 = P0^6;
-  11          sbit L4 = P0^7;
-  12          
-  13          
-  14          char le_teclado(){
-  15   1      static char tecla;
-  16   1      char tecla_atual;
-  17   1        tecla_atual = varredura();
-  18   1        if(tecla_atual!= tecla){
-  19   2        tecla = tecla_atual;
-  20   2        return tecla;
-  21   2        }
-  22   1      return '\0';
-  23   1      }
-  24          
-  25          void atraso_1m(){
-  26   1        
-  27   1        TR0 = 0;
-  28   1        TF0 = 0; //limpa a flag de estouro  
-  29   1        TMOD &= 0xF0;
-  30   1        TMOD |= 0x02;
-  31   1        //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
-  32   1        // 1 ms -> 1844 ciclos -> 65536 - 1844 ciclos = 63692 -> valor a ser colocado no registrador
-  33   1        TH0 = 0xF8; 
-  34   1        TL0 = 0xCC;
-  35   1        TR0 = 1; //liga o timer
-  36   1        while(TF0 == 0);
-  37   1      
-  38   1      }
-  39          
-  40          char debouncing(char tecla){
-  41   1        
-  42   1        char i = 0;
-  43   1        for (i = 0; i<=8; i++){
-  44   2            
-  45   2          if (P0 != tecla){
-  46   3            return 0;
-  47   3          }
-  48   2          atraso_1m();
-  49   2          
-  50   2        }
-  51   1        return 1;
-  52   1      
-  53   1      }
-  54          
-C51 COMPILER V9.56.0.0   TECLADO                                                           05/18/2018 19:59:39 PAGE 2   
+   3          #include<buzzer.h>
+   4          #include<lcd.h>
+   5          
+   6          
+   7          sbit C1 = P0^0; //coluna 1
+   8          sbit C2 = P0^1;
+   9          sbit C3 = P0^2;
+  10          //sbit L1 = P0^4;   //linha 1
+  11          //sbit L2 = P0^5;
+  12          //sbit L3 = P0^6;
+  13          //sbit L4 = P0^7;
+  14          
+  15          
+  16          char le_teclado(){
+  17   1        
+  18   1        static char tecla;
+  19   1        char tecla_atual;
+  20   1          tecla_atual = varredura();
+  21   1          
+  22   1          if(tecla_atual != tecla){
+  23   2            tecla = tecla_atual;
+  24   2          //  escreve_LCD(tecla);
+  25   2          //  sound_buzzer_teclado();
+  26   2            return tecla;
+  27   2          }
+  28   1        return '\0';
+  29   1      }
+  30          
+  31          void atraso_1m(){
+  32   1        
+  33   1        TR0 = 0;
+  34   1        TF0 = 0; //limpa a flag de estouro  
+  35   1        TMOD &= 0xF0;
+  36   1        TMOD |= 0x02;
+  37   1        //22,184 Mhz / 12 = 1,848 MHz (fTimer) -> Ttimer = 0,541 us
+  38   1        // 1 ms -> 1844 ciclos -> 65536 - 1844 ciclos = 63692 -> valor a ser colocado no registrador
+  39   1        TH0 = 0xF8; 
+  40   1        TL0 = 0xCC;
+  41   1        TR0 = 1; //liga o timer
+  42   1        while(TF0 == 0);
+  43   1      
+  44   1      }
+  45          
+  46          char debouncing(char tecla){
+  47   1        
+  48   1        char i = 0;
+  49   1        for (i = 0; i<=8; i++){
+  50   2            
+  51   2          if (P0 != tecla){
+  52   3            return 0;
+  53   3          }
+  54   2          atraso_1m();
+C51 COMPILER V9.54   TECLADO                                                               05/25/2018 20:17:32 PAGE 2   
 
-  55          char varredura(){
-  56   1        C1 = 0;
-  57   1        C2 = 1;
-  58   1        C3 = 1;
-  59   1        switch(P0){
-  60   2          case 0x7E:    //L1
-  61   2            if(debouncing(0x7E))
-  62   2              return '1';
-  63   2          case 0xBE:    //L2
-  64   2            if(debouncing(0xBE))
-  65   2              return '4';
-  66   2          case 0xDE:    //L3
-  67   2            if(debouncing(0xDE))
-  68   2              return '7';
-  69   2          case 0xEE:    //L4
-  70   2            if(debouncing(0xEE))
-  71   2              return '*';
-  72   2        }
-  73   1        
-  74   1        C1 = 1;
-  75   1        C2 = 0;
-  76   1        C3 = 1;
-  77   1        switch(P0){
-  78   2          case 0x7D:    //L1
-  79   2            if(debouncing(0x7D))
-  80   2              return '2';
-  81   2          case 0xBD:    //L2
-  82   2            if(debouncing(0xBD))
-  83   2              return '5';
-  84   2          case 0xDD:    //L3
-  85   2            if(debouncing(0xDD))
-  86   2              return '8';
-  87   2          case 0xED:    //L4
-  88   2            if(debouncing(0xED))
-  89   2              return '0';
-  90   2        }
-  91   1        
-  92   1        C1 = 1;
-  93   1        C2 = 1;
-  94   1        C3 = 0;
-  95   1        switch(P0){
-  96   2          case 0x7B:    //L1
-  97   2            if(debouncing(0x7B))
-  98   2              return '3';
-  99   2          case 0xBB:    //L2
- 100   2            if(debouncing(0xBB))
- 101   2              return '6';
- 102   2          case 0xDB:    //L3
- 103   2            if(debouncing(0xDB))
- 104   2              return '9';
- 105   2          case 0xEB:    //L4
- 106   2            if(debouncing(0xEB))
- 107   2              return '#';
- 108   2          }
- 109   1        
- 110   1        return '\0';
- 111   1      }
+  55   2          
+  56   2        }
+  57   1        return 1;
+  58   1      
+  59   1      }
+  60          
+  61          char varredura(){
+  62   1        C1 = 0;
+  63   1        C2 = 1;
+  64   1        C3 = 1;
+  65   1        switch(P0){
+  66   2          case 0x7E:    //L1
+  67   2            if(debouncing(0x7E))
+  68   2              return '1';
+  69   2          case 0xBE:    //L2
+  70   2            if(debouncing(0xBE))
+  71   2              return '4';
+  72   2          case 0xDE:    //L3
+  73   2            if(debouncing(0xDE))
+  74   2              return '7';
+  75   2          case 0xEE:    //L4
+  76   2            if(debouncing(0xEE))
+  77   2              return '*';
+  78   2        }
+  79   1        
+  80   1        C1 = 1;
+  81   1        C2 = 0;
+  82   1        C3 = 1;
+  83   1        switch(P0){
+  84   2          case 0x7D:    //L1
+  85   2            if(debouncing(0x7D))
+  86   2              return '2';
+  87   2          case 0xBD:    //L2
+  88   2            if(debouncing(0xBD))
+  89   2              return '5';
+  90   2          case 0xDD:    //L3
+  91   2            if(debouncing(0xDD))
+  92   2              return '8';
+  93   2          case 0xED:    //L4
+  94   2            if(debouncing(0xED))
+  95   2              return '0';
+  96   2        }
+  97   1        
+  98   1        C1 = 1;
+  99   1        C2 = 1;
+ 100   1        C3 = 0;
+ 101   1        switch(P0){
+ 102   2          case 0x7B:    //L1
+ 103   2            if(debouncing(0x7B))
+ 104   2              return '3';
+ 105   2          case 0xBB:    //L2
+ 106   2            if(debouncing(0xBB))
+ 107   2              return '6';
+ 108   2          case 0xDB:    //L3
+ 109   2            if(debouncing(0xDB))
+ 110   2              return '9';
+ 111   2          case 0xEB:    //L4
+ 112   2            if(debouncing(0xEB))
+ 113   2              return '#';
+ 114   2          }
+ 115   1        
+ 116   1        return '\0';
+C51 COMPILER V9.54   TECLADO                                                               05/25/2018 20:17:32 PAGE 3   
+
+ 117   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
    CODE SIZE        =    266    ----
    CONSTANT SIZE    =   ----    ----
-C51 COMPILER V9.56.0.0   TECLADO                                                           05/18/2018 19:59:39 PAGE 3   
-
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
    DATA SIZE        =      1    ----

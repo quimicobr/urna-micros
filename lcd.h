@@ -9,3 +9,5 @@ void escreve_LCD(char X);
 void escreve_mensagem(char* mensagem);
 
 void escreve_comando(unsigned char com);
+
+void clear_lcd();

@@ -3,54 +3,51 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Tool Versions:</h2>
-IDE-Version: µVision V5.20.0.39
-Copyright (C) 2016 ARM Ltd and ARM Germany GmbH. All rights reserved.
-License Information: DELET EE, UFRGS, LIC=----
+IDE-Version: µVision V5.23.0.0
+Copyright (C) 2017 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: UFRGS DELET, UFRGS, LIC=----
  
 Tool Versions:
-Toolchain:       PK51 Prof. Develpers Kit  Version: 9.56.0.0
-Toolchain Path:  C:\Keil_v5_C51\C51\BIN
-C Compiler:      C51.exe V9.56.0.0
-Assembler:       A51.exe V8.2.5.0
+Toolchain:       PK51 Prof. Develpers Kit  Version: 9.54
+Toolchain Path:  C:\Keil_v5\C51\BIN
+C Compiler:      C51.exe V9.54
+Assembler:       A51.exe V8.02c
 Linker/Locator:  BL51.exe V6.22
 Library Manager: LIB51.exe V4.30.1.0
 Hex Converter:   OH51.exe V2.7.0.0
-CPU DLL:         S8051.DLL V3.106.0.0
-Dialog DLL:      DP51.DLL V2.63.0.0 
+CPU DLL:         S8051.DLL V3.100.0.0
+Dialog DLL:      DP51.DLL V2.62.0.1 
 <h2>Project:</h2>
-G:\Users\aluno\Downloads\urna-micros-davi-1\urna-micros-davi-1\projeto_micros_gd.uvproj
-Project File Date:  05/18/2018
+G:\Users\aluno\Downloads\urna-micros-davi-1\projeto_micros_gd.uvproj
+Project File Date:  05/23/2018
 
 <h2>Output:</h2>
 Rebuild target 'Target 1'
 assembling STARTUP.A51...
 compiling codigo_main.c...
-codigo_main.c(106): warning C280: 'c': unreferenced local variable
-codigo_main.c(107): warning C280: 'UB_escrito': unreferenced local variable
+codigo_main.c(427): warning C276: constant in condition expression
 compiling lcd.c...
 compiling teclado.c...
 compiling serial.c...
 compiling relogio.c...
+compiling myString.c...
+compiling buzzer.c...
 linking...
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_ESCREVE_MENSAGEM?LCD
+    SEGMENT: ?PR?CLEAR_PACOTE?CODIGO_MAIN
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?CLEAR_LCD?LCD
+    SEGMENT: ?PR?_COMPARA_STRING?MYSTRING
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?LE_TECLADO?TECLADO
+    SEGMENT: ?PR?_NUMBER_TO_CHAR?MYSTRING
 *** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SOLICITA_SENADOR?SERIAL
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SOLICITA_GOVERNADOR?SERIAL
-*** WARNING L16: UNCALLED SEGMENT, IGNORED FOR OVERLAY PROCESS
-    SEGMENT: ?PR?_SOLICITA_PRESIDENTE?SERIAL
+    SEGMENT: ?PR?_INICIALIZA_STRING?MYSTRING
 *** WARNING L15: MULTIPLE CALL TO SEGMENT
     SEGMENT: ?PR?_ESCREVE_SERIAL?SERIAL
     CALLER1: ?C_C51STARTUP
     CALLER2: ?PR?TRATA_INTERRUPCAO_SERIAL?SERIAL
-Program Size: data=77.0 xdata=870 code=1298
+Program Size: data=129.0 xdata=870 code=2354
 creating hex file from ".\Objects\projeto_micros_gd"...
-".\Objects\projeto_micros_gd" - 0 Error(s), 9 Warning(s).
+".\Objects\projeto_micros_gd" - 0 Error(s), 6 Warning(s).
 Build Time Elapsed:  00:00:01
 </pre>
 </body>

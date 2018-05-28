@@ -1,25 +1,31 @@
 #include<reg52.h>
 #include<teclado.h>
+#include<buzzer.h>
+#include<lcd.h>
 
 
 sbit C1 = P0^0;	//coluna 1
 sbit C2 = P0^1;
 sbit C3 = P0^2;
-sbit L1 = P0^4; 	//linha 1
-sbit L2 = P0^5;
-sbit L3 = P0^6;
-sbit L4 = P0^7;
+//sbit L1 = P0^4; 	//linha 1
+//sbit L2 = P0^5;
+//sbit L3 = P0^6;
+//sbit L4 = P0^7;
 
 
 char le_teclado(){
-static char tecla;
-char tecla_atual;
-	tecla_atual = varredura();
-	if(tecla_atual!= tecla){
-	tecla = tecla_atual;
-	return tecla;
-	}
-return '\0';
+	
+	static char tecla;
+	char tecla_atual;
+		tecla_atual = varredura();
+		
+		if(tecla_atual != tecla){
+			tecla = tecla_atual;
+		//	escreve_LCD(tecla);
+		//	sound_buzzer_teclado();
+			return tecla;
+		}
+	return '\0';
 }
 
 void atraso_1m(){
