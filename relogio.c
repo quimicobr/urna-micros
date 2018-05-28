@@ -7,6 +7,8 @@
 
 //65536 - 46080 = 19456 = 0x4C00
 
+/*
+
 void configura_relogio(){
 	T2CON = 0;
 	TL2 = 0;
@@ -43,3 +45,5 @@ void atualiza_relogio() interrupt 5 {
 	
 	
 }
+
+*/

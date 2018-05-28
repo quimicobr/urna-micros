@@ -19,10 +19,10 @@ char le_teclado(){
 	char tecla_atual;
 		tecla_atual = varredura();
 		
-		if(tecla_atual!= tecla){
+		if(tecla_atual != tecla){
 			tecla = tecla_atual;
-			escreve_LCD(tecla);
-			sound_buzzer_teclado();
+		//	escreve_LCD(tecla);
+		//	sound_buzzer_teclado();
 			return tecla;
 		}
 	return '\0';

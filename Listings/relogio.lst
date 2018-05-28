@@ -1,7 +1,7 @@
-C51 COMPILER V9.55   RELOGIO                                                               05/23/2018 13:57:11 PAGE 1   
+C51 COMPILER V9.54   RELOGIO                                                               05/25/2018 20:17:32 PAGE 1   
 
 
-C51 COMPILER V9.55, COMPILATION OF MODULE RELOGIO
+C51 COMPILER V9.54, COMPILATION OF MODULE RELOGIO
 OBJECT MODULE PLACED IN .\Objects\relogio.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE relogio.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\r
                     -elogio.lst) TABS(2) OBJECT(.\Objects\relogio.obj)
@@ -17,53 +17,57 @@ line level    source
    7          
    8          //65536 - 46080 = 19456 = 0x4C00
    9          
-  10          void configura_relogio(){
-  11   1        T2CON = 0;
-  12   1        TL2 = 0;
-  13   1        TH2 = 0x4C;
-  14   1        RCAP2L = 0;
-  15   1        RCAP2H = 0x4C;
-  16   1        TR2 = 1;
-  17   1        
-  18   1        EA = 1; //habilita as interrrupcoes do chip
-  19   1        ET2 = 1;  //habilita interrupcao da serial
-  20   1      }
-  21          
-  22          void atualiza_relogio() interrupt 5 {
-  23   1        
-  24   1        static char count = 0;
-  25   1        TF2 = 0;
-  26   1      
-  27   1        count ++;
-  28   1        
-  29   1        if (count >= 40){
-  30   2          count = 0;
-  31   2          segundo ++;
-  32   2          if (segundo >= 60){
-  33   3            segundo = 0;
-  34   3            minuto ++;
-  35   3            if (minuto >= 60){
-  36   4              minuto = 0;
-  37   4              if (hora >= 24){
-  38   5                hora = 0;
-  39   5              }
-  40   4            }
-  41   3          }
-  42   2        }
-  43   1        
-  44   1        
-  45   1      }
+  10          /*
+  11          
+  12          void configura_relogio(){
+  13            T2CON = 0;
+  14            TL2 = 0;
+  15            TH2 = 0x4C;
+  16            RCAP2L = 0;
+  17            RCAP2H = 0x4C;
+  18            TR2 = 1;
+  19            
+  20            EA = 1; //habilita as interrrupcoes do chip
+  21            ET2 = 1;  //habilita interrupcao da serial
+  22          }
+  23          
+  24          void atualiza_relogio() interrupt 5 {
+  25            
+  26            static char count = 0;
+  27            TF2 = 0;
+  28          
+  29            count ++;
+  30            
+  31            if (count >= 40){
+  32              count = 0;
+  33              segundo ++;
+  34              if (segundo >= 60){
+  35                segundo = 0;
+  36                minuto ++;
+  37                if (minuto >= 60){
+  38                  minuto = 0;
+  39                  if (hora >= 24){
+  40                    hora = 0;
+  41                  }
+  42                }
+  43              }
+  44            }
+  45            
+  46            
+  47          }
+  48          
+  49          */
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     82    ----
+   CODE SIZE        =   ----    ----
    CONSTANT SIZE    =   ----    ----
+C51 COMPILER V9.54   RELOGIO                                                               05/25/2018 20:17:32 PAGE 2   
+
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      1    ----
+   DATA SIZE        =   ----    ----
    IDATA SIZE       =   ----    ----
-C51 COMPILER V9.55   RELOGIO                                                               05/23/2018 13:57:11 PAGE 2   
-
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 

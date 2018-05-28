@@ -1,5 +1,6 @@
 #include <myString.h>
 
+
 char len_string(char* string){
 	
 	char i;
@@ -51,19 +52,21 @@ void number_to_char(char* out, char in){
 	
 }
 
-void clear_string(char* string){
-	
-	char i;
-	for (i = 0; string[i] != '\0'; i++){
-		string[i] = '\0';
-	}
-	
-}
 
 void inicializa_string(char* string, char len){
 	
 	char i;
 	for (i = 0; i<len; i++){
+		string[i] = '\0';
+	}
+	
+}
+
+
+void clear_string(char* string){
+	
+	char i;
+	for (i = 0; string[i] != '\0'; i++){
 		string[i] = '\0';
 	}
 	
