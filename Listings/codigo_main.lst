@@ -1,7 +1,7 @@
-C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 1   
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 1   
 
 
-C51 COMPILER V9.55, COMPILATION OF MODULE CODIGO_MAIN
+C51 COMPILER V9.54, COMPILATION OF MODULE CODIGO_MAIN
 OBJECT MODULE PLACED IN .\Objects\codigo_main.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE codigo_main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listin
                     -gs\codigo_main.lst) TABS(2) OBJECT(.\Objects\codigo_main.obj)
@@ -50,294 +50,753 @@ line level    source
   40          idata char pacote[30];
   41          
   42          
-  43          
-  44          void clear_pacote(){
-  45   1        
-  46   1        char i;
-  47   1        for (i = 0; pacote[i] != '\0' && i<30; i++){
-  48   2          pacote[i] = '\0';
-  49   2        }
-  50   1          
-  51   1      }
-  52          
-  53          void configura_serial();
-  54          
-C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 2   
+  43          void clear_pacote(){
+  44   1        
+  45   1        char i;
+  46   1        for (i = 0; pacote[i] != '\0' && i<30; i++){
+  47   2          pacote[i] = '\0';
+  48   2        }
+  49   1          
+  50   1      }
+  51          
+  52          void configura_serial();
+  53          
+  54            xdata struct {
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 2   
 
-  55            xdata struct {
-  56            
-  57            char nome[20];
-  58            char partido[5];
-  59            char nPartido[3];
-  60            unsigned char nVotos;
-  61            
-  62            }presidente[10], governador[10], senador[10];
-  63          
-  64          short code codigo_eleitor [] = {262659, 206603, 244444, 216628, 
-  65                262645,
-  66                208221,
-  67                262668,
-  68                230357,
-  69                262672,
-  70                143293,
-  71                245562,
-  72                262686,
-  73                264768,
-  74                161948,
-  75                262649,
-  76                231423,
-  77                230340,
-  78                195149,
-  79                231023,
-  80                231035,
-  81                221689,
-  82                220149,
-  83                264770,
-  84                216625,
-  85                262670,
-  86                180669,
-  87                262688,
-  88                186103,
-  89                230230,
-  90                219839,
-  91                243704,
-  92                243716,
-  93                275628,
-  94                262543,
-  95                275632,
-  96                275631,
-  97                275629,
-  98                221433,
-  99                262542,
- 100                275633,
- 101                218776,
- 102                216149,
- 103                262539,
- 104                207273,
- 105                259797 };
- 106            
- 107            
- 108          //Como vai funcionar: a urna tem que estar em modo standby para receber algo do teclado ou da serial.
- 109          //Se ela está em modo bloqueada, ela não pode estar disponível para receber nada do teclado.
- 110          //Se ela está em modo
- 111          
- 112          
- 113          //Inicialização: configurar serial, relógio, LCD e pedir os dados de todos os candidatos possíveis 
- 114          
- 115          /*void varredura_candidatos(){
- 116            
-C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 3   
+  55            
+  56            char nome[20];
+  57            char partido[5];
+  58            char nPartido[3];
+  59            unsigned char nVotos;
+  60            
+  61            }presidente[10], governador[10], senador[10];
+  62          
+  63          short code codigo_eleitor [] = {262659, 206603, 244444, 216628, 262645,
+  64                208221,
+  65                262668,
+  66                230357,
+  67                262672,
+  68                143293,
+  69                245562,
+  70                262686,
+  71                264768,
+  72                161948,
+  73                262649,
+  74                231423,
+  75                230340,
+  76                195149,
+  77                231023,
+  78                231035,
+  79                221689,
+  80                220149,
+  81                264770,
+  82                216625,
+  83                262670,
+  84                180669,
+  85                262688,
+  86                186103,
+  87                230230,
+  88                219839,
+  89                243704,
+  90                243716,
+  91                275628,
+  92                262543,
+  93                275632,
+  94                275631,
+  95                275629,
+  96                221433,
+  97                262542,
+  98                275633,
+  99                218776,
+ 100                216149,
+ 101                262539,
+ 102                207273,
+ 103                259797 };
+ 104            
+ 105            
+ 106          //Como vai funcionar: a urna tem que estar em modo standby para receber algo do teclado ou da serial.
+ 107          //Se ela está em modo bloqueada, ela não pode estar disponível para receber nada do teclado.
+ 108          //Se ela está em modo
+ 109          
+ 110          
+ 111          //Inicialização: configurar serial, relógio, LCD e pedir os dados de todos os candidatos possíveis 
+ 112          /*
+ 113          void varredura_candidatos(){
+ 114            
+ 115            char d0, d1;
+ 116            char d[3];
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 3   
 
- 117            char d0, d1;
- 118            char d[3];
- 119            char comprimento, i, inicio_par;
- 120            char nome[20];
- 121            char partido[5];
- 122            char pos_sen = 0, pos_gov = 0, pos_pres = 0;
- 123          
- 124            for (d0 = '0'; d0 <= '1'; d0++){
- 125              
- 126              d[0] = d0;
- 127              for (d1 = '0'; d1 <= '9'; d1++){
- 128                
- 129                d[1] = d1;
- 130                d[2] = '\0';
- 131                // ---------------------------
- 132                solicita_senador(d);
- 133                while (respostaPC != OK);
- 134                //Pega o dado do senador e ve se nao é nulo
- 135                //Se não for, armazena no vetor de struct
+ 117            char comprimento, i, inicio_par;
+ 118            char nome[20];
+ 119            char partido[5];
+ 120            char pos_sen = 0, pos_gov = 0, pos_pres = 0;
+ 121          
+ 122            for (d0 = '0'; d0 <= '1'; d0++){
+ 123              
+ 124              d[0] = d0;
+ 125              for (d1 = '0'; d1 <= '9'; d1++){
+ 126                
+ 127                d[1] = d1;
+ 128                d[2] = '\0';
+ 129                // ---------------------------
+ 130                solicita_senador(d);
+ 131                while (respostaPC != OK);
+ 132                //Pega o dado do senador e ve se nao é nulo
+ 133                //Se não for, armazena no vetor de struct
+ 134                
+ 135                comprimento = pacote[2];
  136                
- 137                comprimento = pacote[2];
- 138                
- 139                for (i = 0; pacote[i+3] != ' ' ; i++){
- 140                  nome[i] = pacote[i+3];
- 141                }
- 142                inicio_par = i + 1; 
- 143                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
- 144                  partido[i] = pacote[i+inicio_par];
- 145                }
- 146                
- 147                
- 148                if(!compara_string(nome,"NULO")){
- 149                  copia_string(senador[pos_sen].nome, nome);
- 150                  copia_string(senador[pos_sen].partido, partido);
- 151                  copia_string(senador[pos_sen].nPartido, d);
- 152                }
- 153                clear_string(pacote);
- 154                clear_string(nome);
- 155                clear_string(partido);
- 156                // ---------------------------
- 157                solicita_governador(d);
- 158                
- 159                while (respostaPC != OK);
- 160                //Pega o dado do senador e ve se nao é nulo
- 161                //Se não for, armazena no vetor de struct
- 162                comprimento = pacote[2];
- 163                
- 164                for (i = 0; pacote[i+3] != ' '; i++){
- 165                  nome[i] = pacote[i+3];
- 166                }
- 167                inicio_par = i + 1; 
- 168                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
- 169                  partido[i] = pacote[i+inicio_par];
- 170                }
+ 137                for (i = 0; pacote[i+3] != ' ' ; i++){
+ 138                  nome[i] = pacote[i+3];
+ 139                }
+ 140                inicio_par = i + 1; 
+ 141                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+ 142                  partido[i] = pacote[i+inicio_par];
+ 143                }
+ 144                
+ 145                
+ 146                if(!compara_string(nome,"NULO")){
+ 147                  copia_string(senador[pos_sen].nome, nome);
+ 148                  copia_string(senador[pos_sen].partido, partido);
+ 149                  copia_string(senador[pos_sen].nPartido, d);
+ 150                }
+ 151                clear_string(pacote);
+ 152                clear_string(nome);
+ 153                clear_string(partido);
+ 154                // ---------------------------
+ 155                solicita_governador(d);
+ 156                
+ 157                while (respostaPC != OK);
+ 158                //Pega o dado do senador e ve se nao é nulo
+ 159                //Se não for, armazena no vetor de struct
+ 160                comprimento = pacote[2];
+ 161                
+ 162                for (i = 0; pacote[i+3] != ' '; i++){
+ 163                  nome[i] = pacote[i+3];
+ 164                }
+ 165                inicio_par = i + 1; 
+ 166                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+ 167                  partido[i] = pacote[i+inicio_par];
+ 168                }
+ 169                
+ 170                clear_pacote();
  171                
- 172                clear_pacote();
- 173                
- 174                if(!compara_string(nome,"NULO")){
- 175                  copia_string(governador[pos_sen].nome, nome);
- 176                  copia_string(governador[pos_sen].partido, partido);
- 177                  copia_string(governador[pos_sen].nPartido, d);
- 178                }
-C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 4   
+ 172                if(!compara_string(nome,"NULO")){
+ 173                  copia_string(governador[pos_sen].nome, nome);
+ 174                  copia_string(governador[pos_sen].partido, partido);
+ 175                  copia_string(governador[pos_sen].nPartido, d);
+ 176                }
+ 177                
+ 178                // ---------------------------
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 4   
 
- 179                
- 180                // ---------------------------
- 181                solicita_presidente(d);
- 182                
- 183                while (respostaPC != OK);
- 184                //Pega o dado do senador e ve se nao é nulo
- 185                //Se não for, armazena no vetor de struct
- 186                comprimento = pacote[2];
- 187                
- 188                for (i = 0; pacote[i+3] != ' '; i++){
- 189                  nome[i] = pacote[i+3];
- 190                }
- 191                inicio_par = i + 1; 
- 192                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
- 193                  partido[i] = pacote[i+inicio_par];
- 194                }
+ 179                solicita_presidente(d);
+ 180                
+ 181                while (respostaPC != OK);
+ 182                //Pega o dado do senador e ve se nao é nulo
+ 183                //Se não for, armazena no vetor de struct
+ 184                comprimento = pacote[2];
+ 185                
+ 186                for (i = 0; pacote[i+3] != ' '; i++){
+ 187                  nome[i] = pacote[i+3];
+ 188                }
+ 189                inicio_par = i + 1; 
+ 190                for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+ 191                  partido[i] = pacote[i+inicio_par];
+ 192                }
+ 193                
+ 194                clear_pacote();
  195                
- 196                clear_pacote();
- 197                
- 198                if(!compara_string(nome,"NULO")){
- 199                  copia_string(presidente[pos_sen].nome, nome);
- 200                  copia_string(presidente[pos_sen].partido, partido);
- 201                  copia_string(presidente[pos_sen].nPartido, d);
- 202                }
- 203          
- 204              } 
- 205            }
- 206          }*/
- 207          /*
- 208          void envia_boletim(){
- 209            
- 210            char i;
- 211            char votos[3];
- 212            
- 213            for (i = 0; i<10; i++){
- 214              
- 215              
- 216              escreve_serial("Senador: {");
+ 196                if(!compara_string(nome,"NULO")){
+ 197                  copia_string(presidente[pos_sen].nome, nome);
+ 198                  copia_string(presidente[pos_sen].partido, partido);
+ 199                  copia_string(presidente[pos_sen].nPartido, d);
+ 200                }
+ 201          
+ 202              } 
+ 203            }
+ 204          }
+ 205          
+ 206          */
+ 207          
+ 208          /*
+ 209          
+ 210          void envia_boletim(){
+ 211            
+ 212            char i;
+ 213            char votos[3];
+ 214            
+ 215            for (i = 0; i<10; i++){
+ 216              
  217              
- 218              if(compara_string(senador[i].nome, "")){
- 219                
- 220                escreve_serial("(");
- 221                escreve_serial(senador[i].nome);
- 222                escreve_serial(",");
- 223                number_to_char(votos,senador[i].nVotos);
- 224                escreve_serial(votos);
- 225                escreve_serial(") ");
- 226                
- 227              }
- 228              
- 229              escreve_serial("} Governador: {");
+ 218              escreve_serial("Senador: {");
+ 219              
+ 220              if(compara_string(senador[i].nome, "")){
+ 221                
+ 222                escreve_serial("(");
+ 223                escreve_serial(senador[i].nome);
+ 224                escreve_serial(",");
+ 225                number_to_char(votos,senador[i].nVotos);
+ 226                escreve_serial(votos);
+ 227                escreve_serial(") ");
+ 228                
+ 229              }
  230              
- 231              if(compara_string(governador[i].nome, "")){
- 232                
- 233                escreve_serial("(");
- 234                escreve_serial(governador[i].nome);
- 235                escreve_serial(",");
- 236                number_to_char(votos,governador[i].nVotos);
- 237                escreve_serial(votos);
- 238                escreve_serial(") ");
- 239                
- 240              }
-C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 5   
+ 231              escreve_serial("} Governador: {");
+ 232              
+ 233              if(compara_string(governador[i].nome, "")){
+ 234                
+ 235                escreve_serial("(");
+ 236                escreve_serial(governador[i].nome);
+ 237                escreve_serial(",");
+ 238                number_to_char(votos,governador[i].nVotos);
+ 239                escreve_serial(votos);
+ 240                escreve_serial(") ");
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 5   
 
- 241              
- 242              escreve_serial("} Presidente: {");
+ 241                
+ 242              }
  243              
- 244              if(compara_string(presidente[i].nome, "")){
- 245                
- 246                escreve_serial("(");
- 247                escreve_serial(presidente[i].nome);
- 248                escreve_serial(",");
- 249                number_to_char(votos,presidente[i].nVotos);
- 250                escreve_serial(votos);
- 251                escreve_serial(") ");
- 252                
- 253              }
- 254              
- 255              escreve_serial("}");
- 256            }
- 257          }
- 258          *//*
- 259          void inicializa_structs(){
- 260            
- 261            char i;
- 262            for(i = 0; i<10; i++){
- 263              
- 264              inicializa_string(senador[i].nome, 20);
- 265              inicializa_string(senador[i].partido, 5);
- 266              inicializa_string(senador[i].nPartido, 3);
- 267              senador[i].nVotos = 0;
- 268              
- 269              inicializa_string(governador[i].nome, 20);
- 270              inicializa_string(governador[i].partido, 5);
- 271              inicializa_string(governador[i].nPartido, 3);
- 272              governador[i].nVotos = 0;
- 273              
- 274              inicializa_string(presidente[i].nome, 20);
- 275              inicializa_string(presidente[i].partido, 5);
- 276              inicializa_string(presidente[i].nPartido, 3);
- 277              presidente[i].nVotos = 0;
- 278              
- 279            }
- 280            
- 281          }*/
- 282          
- 283          void main(){
- 284   1        char c;
- 285   1        
- 286   1        configura_serial();
- 287   1        configura_relogio();
- 288   1        
- 289   1        //Inicializa o visor LCD
- 290   1        LCD_init();
- 291   1      
- 292   1        //inicializa_structs();
- 293   1          //clear_pacote();
- 294   1          //solicita_senador("13");
- 295   1        
- 296   1        while(1){
- 297   2          
- 298   2          c = le_teclado();
- 299   2          
- 300   2        } 
- 301   1      }
- 302          
-C51 COMPILER V9.55   CODIGO_MAIN                                                           05/23/2018 13:57:11 PAGE 6   
+ 244              escreve_serial("} Presidente: {");
+ 245              
+ 246              if(compara_string(presidente[i].nome, "")){
+ 247                
+ 248                escreve_serial("(");
+ 249                escreve_serial(presidente[i].nome);
+ 250                escreve_serial(",");
+ 251                number_to_char(votos,presidente[i].nVotos);
+ 252                escreve_serial(votos);
+ 253                escreve_serial(") ");
+ 254                
+ 255              }
+ 256              
+ 257              escreve_serial("}");
+ 258            }
+ 259          }
+ 260          
+ 261          */
+ 262          
+ 263          /*
+ 264          
+ 265          void inicializa_structs(){
+ 266            
+ 267            char i;
+ 268            for(i = 0; i<10; i++){
+ 269              
+ 270              inicializa_string(senador[i].nome, 20);
+ 271              inicializa_string(senador[i].partido, 5);
+ 272              inicializa_string(senador[i].nPartido, 3);
+ 273              senador[i].nVotos = 0;
+ 274              
+ 275              inicializa_string(governador[i].nome, 20);
+ 276              inicializa_string(governador[i].partido, 5);
+ 277              inicializa_string(governador[i].nPartido, 3);
+ 278              governador[i].nVotos = 0;
+ 279              
+ 280              inicializa_string(presidente[i].nome, 20);
+ 281              inicializa_string(presidente[i].partido, 5);
+ 282              inicializa_string(presidente[i].nPartido, 3);
+ 283              presidente[i].nVotos = 0;
+ 284              
+ 285            }
+ 286            
+ 287          }
+ 288          
+ 289          */
+ 290          
+ 291          char d[7];
+ 292          
+ 293          char le_numero(char n){
+ 294   1        static char i=0;
+ 295   1        char c;
+ 296   1        c = le_teclado();
+ 297   1          if(c != 0){
+ 298   2            if(i<n){
+ 299   3            escreve_LCD(c);
+ 300   3            d[i] = c;
+ 301   3            i++;
+ 302   3            }else{
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 6   
 
- 303          
- 304          
- 305          
- 306          
- 307          
- 308          
+ 303   3                  i = 0;
+ 304   3                  return 1; //para 
+ 305   3                 }
+ 306   2          }
+ 307   1        return 0; // continua
+ 308   1      }
  309          
+ 310          
+ 311          
+ 312          
+ 313          char shora[3], sminuto[3];
+ 314          //char segundo_old = 0, minuto_old = 0, contEleitor=0, contPC=0;
+ 315          //char UA = 0; //urna autonoma
+ 316          char estado = 0;
+ 317          unsigned short cartao; //tem que ser long, mas a memoria estoura
+ 318          char urna_ativa = 1;
+ 319          
+ 320          
+ 321          void transicao_estado(char et){
+ 322   1        switch(et){
+ 323   2          case 0: clear_lcd();
+ 324   2                  escreve_mensagem("N de cartao?");
+ 325   2                  clear_string(d);
+ 326   2                  estado = 0;
+ 327   2                  break;
+ 328   2          
+ 329   2          case 1: clear_lcd();
+ 330   2                  escreve_mensagem("N de senador?");
+ 331   2                  clear_string(d);
+ 332   2                  estado = 1;
+ 333   2                  break;
+ 334   2          
+ 335   2          case 2: clear_lcd();
+ 336   2                  escreve_mensagem("N de govern.?");
+ 337   2                  clear_string(d);
+ 338   2                  estado = 2;
+ 339   2                  break;
+ 340   2          
+ 341   2          case 3: clear_lcd();
+ 342   2                  escreve_mensagem("N de pres.?");
+ 343   2                  clear_string(d);
+ 344   2                  estado = 3;
+ 345   2                  break;
+ 346   2                  
+ 347   2          case 4: clear_lcd();
+ 348   2                  escreve_mensagem("FIM!!!");
+ 349   2                  clear_string(d);
+ 350   2                  estado = 4;
+ 351   2                  break;
+ 352   2          
+ 353   2          default: break;
+ 354   2        }
+ 355   1      }
+ 356          
+ 357          
+ 358          
+ 359          char c;
+ 360          void main(){
+ 361   1      
+ 362   1        configura_serial();
+ 363   1      //  configura_relogio();
+ 364   1        
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 7   
+
+ 365   1        //Inicializa o visor LCD
+ 366   1        LCD_init();
+ 367   1        clear_lcd();
+ 368   1        clear_string(d);
+ 369   1        //escreve_mensagem("Inicializando...");
+ 370   1        
+ 371   1        //inicializa_structs();
+ 372   1        //clear_pacote();
+ 373   1        //solicita_senador("13");
+ 374   1        
+ 375   1      
+ 376   1      
+ 377   1        while(1){
+ 378   2          
+ 379   2          //envia sinal de vida para o PC todos os segundos
+ 380   2      //    if(segundo_old != segundo){
+ 381   2      //      escreve_serial("MO");
+ 382   2      //      segundo_old = segundo;
+ 383   2      //    }
+ 384   2          
+ 385   2          //bloqueia urna
+ 386   2          if((hora>=17 || hora<8 || OLU == 0) && urna_ativa != 0){
+ 387   3            clear_lcd();
+ 388   3            escreve_mensagem("Urna Bloqueada");
+ 389   3            urna_ativa = 0;
+ 390   3          }
+ 391   2          
+ 392   2          //libera a urna 
+ 393   2          if(hora<17 && hora >= 8 && OLU == 1 && urna_ativa != 1){
+ 394   3            urna_ativa = 1;
+ 395   3            transicao_estado(0);
+ 396   3          }
+ 397   2          
+ 398   2          if(urna_ativa){
+ 399   3            //leitura do cartao
+ 400   3            
+ 401   3          switch(estado){
+ 402   4            case 0: if(le_numero(2)){ //tem que ser 6, mas a memoria estoura        
+ 403   5                    //cartao = (d[0]- '0')*100000 + (d[1]- '0')*10000 + (d[2]- '0')*1000 + (d[3]- '0')*100 + (d[4]- '0'
+             -)*10 + (d[5]- '0')*1;           
+ 404   5                    cartao = (d[0]- '0')*10 + (d[1]- '0')*1;
+ 405   5                    transicao_estado(1);
+ 406   5                    }   
+ 407   4                    break;
+ 408   4            
+ 409   4            case 1: if(le_numero(2)){ 
+ 410   5                    solicita_senador(d);
+ 411   5                    transicao_estado(2);
+ 412   5                    }
+ 413   4                    break;
+ 414   4                    
+ 415   4            case 2: if(le_numero(2)){ 
+ 416   5                    solicita_governador(d);
+ 417   5                    transicao_estado(3);
+ 418   5                    }
+ 419   4                    break;
+ 420   4                    
+ 421   4            case 3: if(le_numero(2)){ 
+ 422   5                    solicita_presidente(d);
+ 423   5                    transicao_estado(4);
+ 424   5                    }
+ 425   4                    break;  
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 8   
+
+ 426   4                    
+ 427   4            case 4:  if(le_teclado)
+*** WARNING C276 IN LINE 427 OF codigo_main.c: constant in condition expression
+ 428   4                      transicao_estado(0);
+ 429   4                     break;
+ 430   4            
+ 431   4            default: break;
+ 432   4                      
+ 433   4          }
+ 434   3              
+ 435   3          }
+ 436   2        }
+ 437   1      }
+ 438          
+ 439          //    c = le_teclado();
+ 440          //    if(c != 0){   
+ 441          //      if(c == '0'){
+ 442          //      shora[0] = (hora / 10) + '0';
+ 443          //      shora[1] = (hora % 10) + '0';
+ 444          //          
+ 445          //      sminuto[0] = (minuto / 10) + '0';
+ 446          //      sminuto[1] = (minuto % 10) + '0';
+ 447          //          
+ 448          //      clear_lcd();
+ 449          //      escreve_mensagem(shora);
+ 450          //      escreve_mensagem(":");
+ 451          //      escreve_mensagem(sminuto);
+ 452          //      
+ 453          //      sound_buzzer_teclado(); 
+ 454          //      }
+ 455          //      if(c == '*')
+ 456          //          clear_lcd();
+ 457          //      if(c == '#')
+ 458          //          escreve_LCD(OLU + '0');
+ 459          
+ 460          
+ 461          
+ 462            
+ 463          //    c = le_teclado();
+ 464          //    if(c != 0){   
+ 465          //    shora[0] = (hora / 10) + '0';
+ 466          //    shora[1] = (hora % 10) + '0';
+ 467          //        
+ 468          //    sminuto[0] = (minuto / 10) + '0';
+ 469          //    sminuto[1] = (minuto % 10) + '0';
+ 470          //        
+ 471          //    clear_lcd();
+ 472          //    escreve_mensagem(shora);
+ 473          //    escreve_mensagem(":");
+ 474          //    escreve_mensagem(sminuto);
+ 475          //    
+ 476          //    sound_buzzer_teclado(); 
+ 477          //    if(c == '*')
+ 478          //        clear_lcd();
+ 479          //  }
+ 480          
+ 481          
+ 482          
+ 483          
+ 484          
+ 485              //admistração dos timeouts  
+ 486          //    if(resposta_PC == OK){
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 9   
+
+ 487          //      contPC = 0;
+ 488          //      UA = 0;
+ 489          //    }
+ 490          //    if(minuto_old != minuto){
+ 491          //      contEleitor++;
+ 492          //      contPC++;
+ 493          //        if(contPC >=3)
+ 494          //          UA = 1;
+ 495          //      minuto_old = minuto;
+ 496          //    }
+ 497                
+ 498          
+ 499          
+ 500            /*
+ 501            while(1){
+ 502          
+ 503              c = le_teclado;
+ 504              
+ 505                if(c != 0){
+ 506                  
+ 507                  //escreve no lcd o horario
+ 508                  
+ 509                  /*
+ 510                  
+ 511                  shora[1] = (hora / 10) + '0';
+ 512                  shora[0] = (hora % 10) + '0';
+ 513                  shora[2] = 0;
+ 514                  
+ 515                  sminuto[1] = (minuto / 10) + '0';
+ 516                  sminuto[0] = (minuto % 10) + '0';
+ 517                  sminuto[2] = 0;
+ 518                  
+ 519                  clear_lcd();
+ 520                  escreve_mensagem(shora);
+ 521                  escreve_mensagem(":");
+ 522                  escreve_mensagem(sminuto);
+ 523                    */
+ 524          //          escreve_LCD(c);
+ 525                    
+ 526          //      }
+ 527                
+ 528          //    if(((hora>=17 || hora < 8) || !OLU) && estado != 0) 
+ 529          //      transicao_estado(0); //bloqueia a urna
+ 530          
+ 531          //    switch(estado){
+ 532          //    
+ 533          //      case 0: //urna bloqueada
+ 534          //        if(OLU && hora<17 && hora>= 8)
+ 535          //          transicao_estado(1);  
+ 536          //        break;
+ 537          
+ 538          //      case 1: // urna em stand-by (lê os 6 digitos do numero de cartão)       
+ 539          //        
+ 540          //      
+ 541          //      case 2: // administrando votacao para senador (lê 2 digitos)
+ 542          
+ 543          
+ 544          //      case 3: // administrando votacao para governador (lê 2 digitos)
+ 545          
+ 546          
+ 547          //      case 4: // administrando votacao para presidente (lê 2 digitos)
+ 548          //    
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 10  
+
+ 549          //      default:
+ 550          //        break;
+ 551          //    }
+ 552          //  } 
+ 553          //}
+ 554          
+ 555          
+ 556          //void estado_0(){
+ 557          //    if(OLU && hora<17 && hora>= 8)
+ 558          //        transicao_estado(1);  
+ 559          //}
+ 560          
+ 561          //void estado_1(){
+ 562          //    if(((hora>=17 || hora < 8) || !OLU) && estado != 0) 
+ 563          //      transicao_estado(0); //bloqueia a urna
+ 564          //}
+ 565          
+ 566          //void transicao_estado(char es){
+ 567          //  switch(es){
+ 568          //    case 0: //urna bloqueada
+ 569          //      clear_lcd();
+ 570          //      escreve_mensagem("Urna Bloqueada");
+ 571          //      estado = 0;
+ 572          //      break;
+ 573          //    case 1: //stand-by
+ 574          //      clear_lcd();
+ 575          //      escreve_mensagem("Digite o seu n de cartão:");
+ 576          //      estado = 1;
+ 577          //      break;
+ 578          //  }
+ 579          //}
+ 580          
+ 581          
+ 582          //void transicao_estado(char et){
+ 583          //  
+ 584          //  switch(et){
+ 585          //  
+ 586          //  case 0: //urna bloqueada
+ 587          //  clear_lcd();
+ 588          //  escreve_mensagem("Urna Bloqueada");
+ 589          //  estado = 0;
+ 590          //  break;
+ 591          
+ 592          //  case 1: //stand-by
+ 593          //  clear_lcd();
+ 594          //  escreve_mensagem("Digite o seu n de cartão:");
+ 595          //  break;
+ 596          
+ 597          //  case 2: //votacao senador
+ 598          //  clear_lcd();
+ 599          //  escreve_mensagem("Digite o seu n de senador:");
+ 600          //  break;
+ 601          //  
+ 602          //  case 3: //votacao governador
+ 603          //  clear_lcd();
+ 604          //  escreve_mensagem("Digite o seu n de governador:");
+ 605          //  break;
+ 606          
+ 607          //  case 4: //votacao presidente
+ 608          //  clear_lcd();
+ 609          //  escreve_mensagem("Digite o seu n de presidente:");
+ 610          //  break;
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 11  
+
+ 611          
+ 612          //  }
+ 613          
+ 614          //estado = et;
+ 615          
+ 616          //}
+ 617          
+ 618          
+ 619          
+ 620          
+ 621          /*
+ 622          
+ 623            c = le_teclado();
+ 624              if(c != 0){ 
+ 625              escreve_LCD(c);
+ 626              sound_buzzer_teclado(); 
+ 627              if(c == '*')
+ 628                  clear_lcd();
+ 629          
+ 630          
+ 631          char estado, FlagUrnaAutonoma
+ 632          short int cartao, ContTimeOutPc, ContTimeOutEleitor;
+ 633          char cartao_str[7], i;
+ 634          
+ 635          
+ 636          
+ 637          
+ 638          
+ 639          
+ 640          
+ 641          
+ 642          while(1){
+ 643          
+ 644            if(((hora>=17 || hora < 8) || !OLE) && estado != 0) 
+ 645              transicao_estado(0); //bloqueia a urna
+ 646          
+ 647            switch(estado){
+ 648            
+ 649            case 0: //urna bloqueada
+ 650              if(OLE && hora<17 && hora>= 8)
+ 651                transicao_estado(1);  
+ 652              break;
+ 653          
+ 654            case 1: // urna em stand-by (lê os 6 digitos do numero de cartão)
+ 655              estado_1();
+ 656                  
+ 657              
+ 658            case 2: // administrando votacao para senador (lê 2 digitos)
+ 659          
+ 660          
+ 661            case 3: // administrando votacao para governador (lê 2 digitos)
+ 662          
+ 663          
+ 664            case 4: // administrando votacao para presidente (lê 2 digitos)
+ 665          
+ 666          
+ 667          
+ 668            }
+ 669          }
+ 670          
+ 671          
+ 672          
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 12  
+
+ 673          
+ 674          char le_digito(char * d, n){
+ 675          //entrada: string a retornar os digitos, numero de digitos desejados
+ 676          //saida: 0, não terminou, fica no estado; 1, terminou, vai pro proximo estado; -1, cancela tudo e reinici
+             -a o estado. 
+ 677          //entrada e saida: string q armazena os digitos (ponteiro)
+ 678          static i = 0;
+ 679          char digito;
+ 680          digito = le_teclado();
+ 681            if(digito != 0){
+ 682              if(digito != '#'){
+ 683              d[i] = digito;
+ 684              i++;
+ 685                if(i == n){
+ 686                i = 0;    
+ 687                return 1; //leitura completa
+ 688                }   
+ 689              } else {
+ 690              i = 0;
+ 691              return -1; //cancela a leitura 
+ 692              }
+ 693            }
+ 694          return 0; //continua a leitura
+ 695          }
+ 696          
+ 697          
+ 698          
+ 699          
+ 700          estado_1(){
+ 701          
+ 702          }
+ 703          
+ 704          
+ 705          
+ 706            
+ 707          
+ 708          
+ 709          
+ 710          char adquire_digito(char* string, char n_digitos){
+ 711          //retorna 1 quando termina de ler os n digitos
+ 712          //retorna 0 se ainda nao terminou de ler
+ 713          //retorna -1 se o usuario deseja interromper a leitura
+ 714          //entrada: string a retornar os digitos, numero de digitos desejados
+ 715          //saida: 0, não terminou, fica no estado; 1, terminou, vai pro proximo estado; -1, cancela tudo e reinici
+             -a o estado. 
+ 716          //entrada e saida: string q armazena os digitos (ponteiro)
+ 717          static i = 0;
+ 718          d[i] = le_teclado();
+ 719            if(d[i] != 0){
+ 720              if(digito != '#'){
+ 721                if(i <= n){ //enquanto i<n
+ 722                d[i] = digito;
+ 723                i++;
+ 724                escreve_LCD(d[i]);
+ 725                }else if(d[i] == '*'){ //espera a confirmação 
+ 726                  i = 0;    
+ 727                  return 1; //leitura completa
+ 728                  }
+ 729                }   
+ 730              
+ 731              } else {
+ 732              i = 0;
+C51 COMPILER V9.54   CODIGO_MAIN                                                           05/25/2018 20:17:31 PAGE 13  
+
+ 733              return -1; //cancela a leitura 
+ 734              }
+ 735            }
+ 736          return 0; //continua a leitura
+ 737          }
+ 738          
+ 739          
+ 740          short int converte_string_int(char* string){
+ 741          char i;
+ 742          short int r = 0;
+ 743          for(i=0; string != 0; i++)
+ 744            r = r + (string[i] - '0')*i;
+ 745          return r
+ 746          }
+ 747          
+ 748          
+ 749          
+ 750          */
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =     43    ----
-   CONSTANT SIZE    =     90    ----
+   CODE SIZE        =    484    ----
+   CONSTANT SIZE    =    165    ----
    XDATA SIZE       =    870    ----
    PDATA SIZE       =   ----    ----
-   DATA SIZE        =      6       1
+   DATA SIZE        =     24       2
    IDATA SIZE       =     30    ----
    BIT SIZE         =   ----    ----
 END OF MODULE INFORMATION.
 
 
-C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
+C51 COMPILATION COMPLETE.  1 WARNING(S),  0 ERROR(S)

@@ -1,7 +1,7 @@
-C51 COMPILER V9.55   MYSTRING                                                              05/23/2018 13:57:11 PAGE 1   
+C51 COMPILER V9.54   MYSTRING                                                              05/25/2018 20:17:32 PAGE 1   
 
 
-C51 COMPILER V9.55, COMPILATION OF MODULE MYSTRING
+C51 COMPILER V9.54, COMPILATION OF MODULE MYSTRING
 OBJECT MODULE PLACED IN .\Objects\myString.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE myString.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\
                     -myString.lst) TABS(2) OBJECT(.\Objects\myString.obj)
@@ -10,76 +10,79 @@ line level    source
 
    1          #include <myString.h>
    2          
-   3          char len_string(char* string){
-   4   1        
-   5   1        char i;
-   6   1        for (i = 0; string[i] != '\0'; i++){}
-   7   1        return i;
-   8   1        
-   9   1      }
-  10          
-  11          char maior(char arg1, char arg2){
-  12   1        if (arg1 >arg2) return arg1;
-  13   1        else return arg2;
-  14   1      }
-  15                
-  16          char compara_string(char* string1,char* string2){
-  17   1        
-  18   1        //strings iguais retorna 1
-  19   1        //strings diferentes retorna 0
-  20   1        
-  21   1        char i, out = 1;
-  22   1        char lim;
-  23   1        lim = maior(len_string(string1), len_string(string2));
-  24   1        
-  25   1        for (i = 0; i< lim; i++){
-  26   2          
-  27   2          if(string1[i] != string2[i]){
-  28   3            return 0;
-  29   3          }
-  30   2        }
-  31   1        return 1;
-  32   1      } 
-  33          
-  34          void copia_string(char* alvo, char* valor){
-  35   1        
-  36   1        char i;
-  37   1        for (i = 0; valor[i] != '\0'; i++) alvo[i] = valor[i];
-  38   1      
-  39   1      }
-  40          
-  41          void number_to_char(char* out, char in){
-  42   1        
-  43   1        if (in < 10){
-  44   2          out[0] = 0;
-  45   2          out[1] = in +48;
-  46   2        }
-  47   1        else{
-  48   2          out[0] = in%10 + 48;
-  49   2          out[1] = in - (in%10)*10 + 48;
-  50   2        }
-  51   1        
-  52   1      }
-  53          
-  54          void clear_string(char* string){
-C51 COMPILER V9.55   MYSTRING                                                              05/23/2018 13:57:11 PAGE 2   
+   3          
+   4          char len_string(char* string){
+   5   1        
+   6   1        char i;
+   7   1        for (i = 0; string[i] != '\0'; i++){}
+   8   1        return i;
+   9   1        
+  10   1      }
+  11          
+  12          char maior(char arg1, char arg2){
+  13   1        if (arg1 >arg2) return arg1;
+  14   1        else return arg2;
+  15   1      }
+  16                
+  17          char compara_string(char* string1,char* string2){
+  18   1        
+  19   1        //strings iguais retorna 1
+  20   1        //strings diferentes retorna 0
+  21   1        
+  22   1        char i, out = 1;
+  23   1        char lim;
+  24   1        lim = maior(len_string(string1), len_string(string2));
+  25   1        
+  26   1        for (i = 0; i< lim; i++){
+  27   2          
+  28   2          if(string1[i] != string2[i]){
+  29   3            return 0;
+  30   3          }
+  31   2        }
+  32   1        return 1;
+  33   1      } 
+  34          
+  35          void copia_string(char* alvo, char* valor){
+  36   1        
+  37   1        char i;
+  38   1        for (i = 0; valor[i] != '\0'; i++) alvo[i] = valor[i];
+  39   1      
+  40   1      }
+  41          
+  42          void number_to_char(char* out, char in){
+  43   1        
+  44   1        if (in < 10){
+  45   2          out[0] = 0;
+  46   2          out[1] = in +48;
+  47   2        }
+  48   1        else{
+  49   2          out[0] = in%10 + 48;
+  50   2          out[1] = in - (in%10)*10 + 48;
+  51   2        }
+  52   1        
+  53   1      }
+  54          
+C51 COMPILER V9.54   MYSTRING                                                              05/25/2018 20:17:32 PAGE 2   
 
-  55   1        
-  56   1        char i;
-  57   1        for (i = 0; string[i] != '\0'; i++){
-  58   2          string[i] = '\0';
-  59   2        }
-  60   1        
-  61   1      }
-  62          
-  63          void inicializa_string(char* string, char len){
-  64   1        
-  65   1        char i;
-  66   1        for (i = 0; i<len; i++){
-  67   2          string[i] = '\0';
-  68   2        }
-  69   1        
-  70   1      }
+  55          
+  56          void inicializa_string(char* string, char len){
+  57   1        
+  58   1        char i;
+  59   1        for (i = 0; i<len; i++){
+  60   2          string[i] = '\0';
+  61   2        }
+  62   1        
+  63   1      }
+  64          
+  65          
+  66          void clear_string(char* string){
+  67   1        
+  68   1        char i;
+  69   1        for (i = 0; string[i] != '\0'; i++){
+  70   2          string[i] = '\0';
+  71   2        }
+  72   1        
+  73   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE

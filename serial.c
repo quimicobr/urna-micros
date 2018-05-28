@@ -57,7 +57,6 @@ void clear_FIFO(){
 }
 
 
-
 void trata_interrupcao_serial() interrupt 4 {	
 	static char pos = 0, l_final = 2, lendo_par = 0;
 	char add;
@@ -115,6 +114,7 @@ void le_parametros(){
 			case('H'):
 				hora = fifo_recepcao[2];
 				minuto = fifo_recepcao[3];
+				escreve_serial("MH");
 				return;
 				
 			case('S'):
@@ -160,7 +160,7 @@ char trata_dados(){
 				return 0;
 			case('H'):
 				//Atualiza o horario
-				escreve_serial("MH");
+				//escreve_serial("MH");
 				return 2;
 			case('U'):
 				//Envia boletim de urna
@@ -213,7 +213,6 @@ void solicita_senador(char* codigo){
 }
 
 void solicita_governador(char* codigo){
-	
 	char mensagem[6];
 	mensagem[0] = 'M';
 	mensagem[1] = 'G';
@@ -226,7 +225,6 @@ void solicita_governador(char* codigo){
 }
 
 void solicita_presidente(char* codigo){
-	
 	char mensagem[6];
 	mensagem[0] = 'M';
 	mensagem[1] = 'P';

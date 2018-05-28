@@ -1,6 +1,8 @@
 #include<buzzer.h>
 #include<reg52.h>
 
+/*
+
 sbit BUZZER = P3^3;
 
 void sound_buzzer_teclado(){
@@ -60,3 +62,5 @@ void sound_buzzer_voto(){
 		}
 	}
 }
+
+*/

@@ -75,7 +75,7 @@ void escreve_mensagem(char* mensagem){
 	
 }
 
-void clear_LCD(){
+void clear_lcd(){
 	escreve_comando(0x01);
 	atraso_clear();
 }

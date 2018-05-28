@@ -1,7 +1,7 @@
-C51 COMPILER V9.55   TECLADO                                                               05/23/2018 13:57:11 PAGE 1   
+C51 COMPILER V9.54   TECLADO                                                               05/25/2018 20:17:32 PAGE 1   
 
 
-C51 COMPILER V9.55, COMPILATION OF MODULE TECLADO
+C51 COMPILER V9.54, COMPILATION OF MODULE TECLADO
 OBJECT MODULE PLACED IN .\Objects\teclado.obj
 COMPILER INVOKED BY: C:\Keil_v5\C51\BIN\C51.EXE teclado.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\t
                     -eclado.lst) TABS(2) OBJECT(.\Objects\teclado.obj)
@@ -29,10 +29,10 @@ line level    source
   19   1        char tecla_atual;
   20   1          tecla_atual = varredura();
   21   1          
-  22   1          if(tecla_atual!= tecla){
+  22   1          if(tecla_atual != tecla){
   23   2            tecla = tecla_atual;
-  24   2            escreve_LCD(tecla);
-  25   2            sound_buzzer_teclado();
+  24   2          //  escreve_LCD(tecla);
+  25   2          //  sound_buzzer_teclado();
   26   2            return tecla;
   27   2          }
   28   1        return '\0';
@@ -62,7 +62,7 @@ line level    source
   52   3            return 0;
   53   3          }
   54   2          atraso_1m();
-C51 COMPILER V9.55   TECLADO                                                               05/23/2018 13:57:11 PAGE 2   
+C51 COMPILER V9.54   TECLADO                                                               05/25/2018 20:17:32 PAGE 2   
 
   55   2          
   56   2        }
@@ -126,13 +126,13 @@ line level    source
  114   2          }
  115   1        
  116   1        return '\0';
-C51 COMPILER V9.55   TECLADO                                                               05/23/2018 13:57:11 PAGE 3   
+C51 COMPILER V9.54   TECLADO                                                               05/25/2018 20:17:32 PAGE 3   
 
  117   1      }
 
 
 MODULE INFORMATION:   STATIC OVERLAYABLE
-   CODE SIZE        =    274    ----
+   CODE SIZE        =    266    ----
    CONSTANT SIZE    =   ----    ----
    XDATA SIZE       =   ----    ----
    PDATA SIZE       =   ----    ----
