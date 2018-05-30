@@ -16,7 +16,7 @@
 
 //lcd.c
 #define RS P3_6 //sbit for sdcc
-#define E =P3_7 //sbit for sdcc
+#define E  P3_7 //sbit for sdcc
 
 //teclado.c
 #define C1  P0_0 //coluna 1  //sbit for sdcc
@@ -32,7 +32,7 @@
 #define LE_N 1
 #define LE_PARAMETRO 2
 
-char fifo_recepcao[30];
+__idata char fifo_recepcao[30];
 
 //buzzer.c
 #define BUZZER  P3_3 //sbit for sdcc
@@ -62,26 +62,23 @@ char respostaPC;
 #define PG 5 
 #define PP 6 
 
-idata char pacote[30];
+//idata char pacote[30];
+__xdata char pacote[40];
+#define n_sen  4
+#define n_gov  4
+#define n_pres  8
 
-char shora[3], sminuto[3];
-//char segundo_old = 0, minuto_old = 0, contEleitor=0, contPC=0;
-//char UA = 0; //urna autonoma
-char estado = 0;
-unsigned short cartao; //tem que ser long, mas a memoria estoura
-char urna_ativa = 1;
-
-char d[7];
-xdata struct {
+__xdata struct {
 	
 	char nome[20];
 	char partido[5];
 	char nPartido[3];
 	unsigned char nVotos;
 	
-	}presidente[10], governador[10], senador[10];
+	}presidente[n_pres + 2], governador[n_gov + 2], senador[n_sen + 2];
 
-short code codigo_eleitor [] = {262659, 206603, 244444, 216628, 262645,
+
+const long codigo_eleitor [] = {262659, 206603, 244444, 216628, 262645,
 			208221,
 			262668,
 			230357,
@@ -122,7 +119,17 @@ short code codigo_eleitor [] = {262659, 206603, 244444, 216628, 262645,
 			262539,
 			207273,
 			259797 };
+
 char c;
+
+char shora[3], sminuto[3];
+char segundo_old = 0, minuto_old = 0, contEleitor=0, contPC=0;
+char UA = 0; //urna autonoma
+char estado = 0;
+unsigned short cartao; //tem que ser long, mas a memoria estoura
+char urna_ativa = 1;
+
+char d[7];
 
 			
 //FUNCOES
@@ -178,9 +185,6 @@ void LCD_init(){
  atraso_clear();
 
 }
-
-
-
 		
 void escreve_LCD(char X){
 			RS = 1;
@@ -195,6 +199,7 @@ void escreve_LCD(char X){
 void escreve_mensagem(char* mensagem){
 	
 	char i;
+	atraso();
 	for(i = 0; mensagem[i] != 0 ; i++){
 		escreve_LCD(mensagem[i]);	
 	}
@@ -203,6 +208,7 @@ void escreve_mensagem(char* mensagem){
 }
 
 void clear_lcd(){
+	atraso();
 	escreve_comando(0x01);
 	atraso_clear();
 }
@@ -368,9 +374,7 @@ void number_to_char(char* out, char in){
 		out[0] = in%10 + 48;
 		out[1] = in - (in%10)*10 + 48;
 	}
-	
 }
-
 
 void inicializa_string(char* string, char len){
 	
@@ -403,6 +407,174 @@ char i;
 		TI=0;
 	}
 }
+
+
+/*
+	__xdata char n[2];	
+	long ir =0;
+	
+	
+	n[0] = 0;
+	n[1] = 5;
+	
+	
+	escreve_serial("MU");
+	
+	SBUF = 0x00;
+	while(!TI);
+	TI=0;
+	
+	SBUF = 0x05;
+	while(!TI);
+	TI=0;
+		
+	escreve_serial("teste");
+	*/
+
+
+
+void envia_boletim(){
+	
+	__xdata char i;
+	//__xdata char votos[3];
+	__xdata char ser[180];
+	__xdata char len = 0;
+	__xdata unsigned char pos = 0;
+
+	
+	inicializa_string(ser, 180);
+	
+	ser[0] = 'S';
+	ser[1] = '{';
+	pos += 2;
+	
+	for (i = 0; i<n_sen + 2; i++){		
+		if(senador[i].nPartido[0] != 0){
+			ser[pos] = '(';
+			ser[pos + 1] = senador[i].nPartido[0];
+			ser[pos + 2] = senador[i].nPartido[1];
+			ser[pos + 3] = ',';
+			//number_to_char(votos,senador[i].nVotos);
+			ser[pos + 4] = '0';
+			ser[pos + 5] = '0';
+			ser[pos + 6] = ')';
+			pos += 7;
+		}
+	}
+	
+	ser[pos] = '}';
+	pos++;
+	
+	ser[pos] = 'G';
+	ser[pos+1] = '{';
+	pos += 2;
+	
+	for (i = 0; i<n_gov + 2; i++){		
+		if(governador[i].nPartido[0] != 0){
+			ser[pos] = '(';
+			ser[pos + 1] = governador[i].nPartido[0];
+			ser[pos + 2] = governador[i].nPartido[1];
+			ser[pos + 3] = ',';
+			//number_to_char(votos,governador[i].nVotos);
+			ser[pos + 4] = '0';
+			ser[pos + 5] = '0';
+			ser[pos + 6] = ')';
+			pos += 7;
+		}
+	}
+	
+	ser[pos] = '}';
+	pos++;
+	
+	
+	
+	
+	ser[pos] = 'P';
+	ser[pos+1] = '{';
+	pos += 2;
+	
+	for (i = 0; i<n_pres + 2; i++){		
+		if(presidente[i].nPartido[0] != 0){
+			ser[pos] = '(';
+			ser[pos + 1] = presidente[i].nPartido[0];
+			ser[pos + 2] = presidente[i].nPartido[1];
+			ser[pos + 3] = ',';
+			//number_to_char(votos,presidente[i].nVotos);
+			ser[pos + 4] = '0';
+			ser[pos + 5] = '0';
+			ser[pos + 6] = ')';
+			pos += 7;
+		}
+	}
+	
+	ser[pos] = '}';
+	pos++;
+	
+	escreve_serial("MU");
+	
+	//O programa dele entede 128 como -1; so podemos enviar 127 ou 256 bytes
+	
+	//diz q vai enviar 256 bytes
+	//SBUF = (pos>127);
+	SBUF = 1;
+	while(!TI);
+	TI=0;
+	
+	//SBUF = pos-127*(pos>127);
+	SBUF = 0;
+	while(!TI);
+	TI=0;
+	
+	//envia 163 bytes (pos)
+	escreve_serial(ser);
+	
+	escreve_serial("}");
+	
+	//envia 256 - 163 (256-pos) bytes vazios
+	
+	for(i=0; i<(256-pos); i++){
+		SBUF = 0;
+		while(!TI);
+		TI=0;
+	}
+		
+	clear_lcd();
+	escreve_LCD(pos);
+	}
+
+
+/*
+escreve_serial("} Governador: {");
+		
+		if(compara_string(governador[i].nome, "")){
+			
+			escreve_serial("(");
+			escreve_serial(governador[i].nome);
+			escreve_serial(",");
+			number_to_char(votos,governador[i].nVotos);
+			escreve_serial(votos);
+			escreve_serial(") ");
+			
+		}
+		
+		escreve_serial("} Presidente: {");
+		
+		if(compara_string(presidente[i].nome, "")){
+			
+			escreve_serial("(");
+			escreve_serial(presidente[i].nome);
+			escreve_serial(",");
+			number_to_char(votos,presidente[i].nVotos);
+			escreve_serial(votos);
+			escreve_serial(") ");
+			
+		}
+		
+		//n[0] = 0;
+		//n[1] = 3;
+*/
+	
+	
 
 void clear_FIFO(){
 	char i;
@@ -465,6 +637,7 @@ char trata_dados(){
 				//escreve_serial("MH");
 				return 2;
 			case('U'):
+				envia_boletim();
 				//Envia boletim de urna
 				return 0;
 			case('E'):
@@ -516,9 +689,9 @@ void configura_serial(){
 	ES = 1;	//habilita interrupcao da serial
 }
 
-void trata_interrupcao_serial() interrupt 4 {	
+void trata_interrupcao_serial() __interrupt (4) {	
 	static char pos = 0, l_final = 2, lendo_par = 0;
-	char add;
+	signed char add;
 	if(RI == 1){
 		RI = 0;
 		fifo_recepcao[pos] = SBUF;
@@ -621,7 +794,7 @@ void configura_relogio(){
 	ET2 = 1;	//habilita interrupcao da serial
 }
 
-void atualiza_relogio() interrupt 5 {
+void atualiza_relogio() __interrupt(5) {
 	
 	static char count = 0;
 	TF2 = 0;
@@ -724,164 +897,133 @@ void clear_pacote(){
 		
 }
 
+
 void varredura_candidatos(){
-	
+
 	char d0, d1;
 	char d[3];
-	char comprimento, i, inicio_par;
+	char i, inicio_par;
 	char nome[20];
 	char partido[5];
 	char pos_sen = 0, pos_gov = 0, pos_pres = 0;
-
-	for (d0 = '0'; d0 <= '1'; d0++){
+	d[2] = '\0';
+	
+	for (d0 = 0; d0 <= 9; d0++){
+		d[0] = d0 + '0';
 		
-		d[0] = d0;
-		for (d1 = '0'; d1 <= '9'; d1++){
+		for (d1 = 0; d1 <= 9; d1++){
 			
-			d[1] = d1;
-			d[2] = '\0';
+			d[1] = d1 + '0';
+			
 			// ---------------------------
 			solicita_senador(d);
+			
 			while (respostaPC != OK);
 			//Pega o dado do senador e ve se nao é nulo
 			//Se não for, armazena no vetor de struct
 			
-			comprimento = pacote[2];
-			
-			for (i = 0; pacote[i+3] != ' ' ; i++){
+			for (i = 0; (pacote[i+3] != 0) && i<20; i++){
 				nome[i] = pacote[i+3];
 			}
 			inicio_par = i + 1; 
-			for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+			for (i = 0; (pacote[i+inicio_par] != 0) && i<5; i++){
 				partido[i] = pacote[i+inicio_par];
 			}
 			
 			
-			if(!compara_string(nome,"NULO")){
+			if((!compara_string(nome,"Voto NULO")) && (!compara_string(nome,"Voto BRANCO"))){
 				copia_string(senador[pos_sen].nome, nome);
 				copia_string(senador[pos_sen].partido, partido);
 				copia_string(senador[pos_sen].nPartido, d);
+				pos_sen++;
 			}
+						
 			clear_string(pacote);
 			clear_string(nome);
 			clear_string(partido);
+			
+			
+			
 			// ---------------------------
 			solicita_governador(d);
 			
 			while (respostaPC != OK);
 			//Pega o dado do senador e ve se nao é nulo
 			//Se não for, armazena no vetor de struct
-			comprimento = pacote[2];
 			
-			for (i = 0; pacote[i+3] != ' '; i++){
+			for (i = 0; (pacote[i+3] != 0) && i<20; i++){
 				nome[i] = pacote[i+3];
 			}
 			inicio_par = i + 1; 
-			for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+			for (i = 0; (pacote[i+inicio_par] != 0) && i<5; i++){
 				partido[i] = pacote[i+inicio_par];
 			}
 			
-			clear_pacote();
 			
-			if(!compara_string(nome,"NULO")){
-				copia_string(governador[pos_sen].nome, nome);
-				copia_string(governador[pos_sen].partido, partido);
-				copia_string(governador[pos_sen].nPartido, d);
+			if((!compara_string(nome,"Voto NULO")) && (!compara_string(nome,"Voto BRANCO"))){
+				copia_string(governador[pos_gov].nome, nome);
+				copia_string(governador[pos_gov].partido, partido);
+				copia_string(governador[pos_gov].nPartido, d);
+				pos_gov++;
 			}
+						
+			clear_string(pacote);
+			clear_string(nome);
+			clear_string(partido);
 			
 			// ---------------------------
 			solicita_presidente(d);
-			
 			while (respostaPC != OK);
-			//Pega o dado do senador e ve se nao é nulo
-			//Se não for, armazena no vetor de struct
-			comprimento = pacote[2];
 			
-			for (i = 0; pacote[i+3] != ' '; i++){
+			//Pega o dado do presidente e ve se nao é nulo
+			//Se não for, armazena no vetor de struct
+			
+			for (i = 0; (pacote[i+3] != 0) && i<20; i++){
 				nome[i] = pacote[i+3];
 			}
 			inicio_par = i + 1; 
-			for (i = 0; pacote[i+inicio_par] != '\0'; i++){
+			for (i = 0; (pacote[i+inicio_par] != 0) && i<5; i++){
 				partido[i] = pacote[i+inicio_par];
 			}
 			
-			clear_pacote();
-			
-			if(!compara_string(nome,"NULO")){
-				copia_string(presidente[pos_sen].nome, nome);
-				copia_string(presidente[pos_sen].partido, partido);
-				copia_string(presidente[pos_sen].nPartido, d);
+			if((!compara_string(nome,"Voto NULO")) && (!compara_string(nome,"Voto BRANCO"))){
+				copia_string(presidente[pos_pres].nome, nome);
+				copia_string(presidente[pos_pres].partido, partido);
+				copia_string(presidente[pos_pres].nPartido, d);
+				pos_pres++;
 			}
-
+						
+			clear_string(pacote);
+			clear_string(nome);
+			clear_string(partido);
 		}	
 	}
 }
 
-void envia_boletim(){
-	
-	char i;
-	char votos[3];
-	
-	for (i = 0; i<10; i++){
-		
-		
-		escreve_serial("Senador: {");
-		
-		if(compara_string(senador[i].nome, "")){
-			
-			escreve_serial("(");
-			escreve_serial(senador[i].nome);
-			escreve_serial(",");
-			number_to_char(votos,senador[i].nVotos);
-			escreve_serial(votos);
-			escreve_serial(") ");
-			
-		}
-		
-		escreve_serial("} Governador: {");
-		
-		if(compara_string(governador[i].nome, "")){
-			
-			escreve_serial("(");
-			escreve_serial(governador[i].nome);
-			escreve_serial(",");
-			number_to_char(votos,governador[i].nVotos);
-			escreve_serial(votos);
-			escreve_serial(") ");
-			
-		}
-		
-		escreve_serial("} Presidente: {");
-		
-		if(compara_string(presidente[i].nome, "")){
-			
-			escreve_serial("(");
-			escreve_serial(presidente[i].nome);
-			escreve_serial(",");
-			number_to_char(votos,presidente[i].nVotos);
-			escreve_serial(votos);
-			escreve_serial(") ");
-			
-		}
-		
-		escreve_serial("}");
-	}
-}
+
 
 void inicializa_structs(){
 	
 	char i;
-	for(i = 0; i<10; i++){
+	for(i = 0; i<n_sen; i++){
 		
 		inicializa_string(senador[i].nome, 20);
 		inicializa_string(senador[i].partido, 5);
 		inicializa_string(senador[i].nPartido, 3);
 		senador[i].nVotos = 0;
 		
+	}
+	
+	for(i = 0; i<n_gov; i++){
+
 		inicializa_string(governador[i].nome, 20);
 		inicializa_string(governador[i].partido, 5);
 		inicializa_string(governador[i].nPartido, 3);
 		governador[i].nVotos = 0;
+		
+	}
+	
+	for(i = 0; i<n_pres; i++){
 		
 		inicializa_string(presidente[i].nome, 20);
 		inicializa_string(presidente[i].partido, 5);
@@ -890,7 +1032,37 @@ void inicializa_structs(){
 		
 	}
 	
+	copia_string(senador[n_sen].nome, "NULO");
+	copia_string(senador[n_sen].partido, "NOP");
+	copia_string(senador[n_sen].nPartido, "99");
+	senador[n_sen].nVotos = 0;
+	
+	copia_string(governador[n_gov].nome, "NULO");
+	copia_string(governador[n_gov].partido, "NOP");
+	copia_string(governador[n_gov].nPartido, "99");
+	governador[n_gov].nVotos = 0;
+	
+	copia_string(presidente[n_pres].nome, "NULO");
+	copia_string(presidente[n_pres].partido, "NOP");
+	copia_string(presidente[n_pres].nPartido, "99");
+	presidente[n_pres].nVotos = 0;
+	
+	copia_string(senador[n_sen + 1].nome, "BRANCO");
+	copia_string(senador[n_sen + 1].partido, "NOP");
+	copia_string(senador[n_sen + 1].nPartido, "00");
+	senador[n_sen + 1].nVotos = 0;
+	
+	copia_string(governador[n_gov + 1].nome, "BRANCO");
+	copia_string(governador[n_gov + 1].partido, "NOP");
+	copia_string(governador[n_gov + 1].nPartido, "00");
+	governador[n_gov + 1].nVotos = 0;
+	
+	copia_string(presidente[n_pres + 1].nome, "BRANCO");
+	copia_string(presidente[n_pres + 1].partido, "NOP");
+	copia_string(presidente[n_pres + 1].nPartido, "00");
+	presidente[n_pres + 1].nVotos = 0;
 }
+
 
 char le_numero(char n){
 	static char i=0;
@@ -946,30 +1118,58 @@ void transicao_estado(char et){
 	}
 }
 
+
+
 void main(){
 
+	short int i;
+
 	configura_serial();
-//	configura_relogio();
+	//configura_relogio();
 	
 	//Inicializa o visor LCD
 	LCD_init();
 	clear_lcd();
 	clear_string(d);
-	//escreve_mensagem("Inicializando...");
 	
-	//inicializa_structs();
+	//escreve_mensagem("Inicializando...");
+	inicializa_structs();
+	varredura_candidatos();
+	
+	
+	/*
+	
+	for(i=0; i<n_sen + 2; i++){
+		if (senador[i].nPartido[0] != 0)
+			solicita_senador(senador[i].nPartido);
+		while(le_teclado() == 0);
+	}
+	
+	for(i=0; i<n_gov + 2; i++){
+		if (governador[i].nPartido[0] != 0)
+			solicita_governador(governador[i].nPartido);
+		while(le_teclado() == 0);
+	}
+	
+	for(i=0; i<n_pres + 2; i++){
+		if (presidente[i].nPartido[0] != 0)
+			solicita_presidente(presidente[i].nPartido);
+		while(le_teclado() == 0);
+	}
+	
+	*/
+
 	//clear_pacote();
 	//solicita_senador("13");
+
+
+	while(1){/*
 	
-
-
-	while(1){
-		
 		//envia sinal de vida para o PC todos os segundos
-//		if(segundo_old != segundo){
-//			escreve_serial("MO");
-//			segundo_old = segundo;
-//		}
+		if(segundo_old != segundo){
+			escreve_serial("MO");
+			segundo_old = segundo;
+		}
 		
 		//bloqueia urna
 		if((hora>=17 || hora<8 || OLU == 0) && urna_ativa != 0){
@@ -1022,7 +1222,7 @@ void main(){
 		}
 				
 		}
-	}
+	*/}
 }
 
 //		c = le_teclado();
@@ -1095,7 +1295,7 @@ void main(){
 				
 				//escreve no lcd o horario
 				
-				/*
+				
 				
 				shora[1] = (hora / 10) + '0';
 				shora[0] = (hora % 10) + '0';
